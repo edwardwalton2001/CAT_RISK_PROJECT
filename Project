@@ -1,0 +1,100 @@
+-- Total_policy_tiv = sum of exposure.total_tiv_usd for each policy.
+-- Location_count = number of exposure locations attached to the policy.
+-- Avg_location_tiv = average total_tiv_usd per location.
+-- Only include policies whose total_policy_tiv is greater than the average total_policy_tiv across all policies.
+-- Only include policies with at least 3 exposure locations.
+-- Sort from highest to lowest total_policy_tiv.
+
+WITH policy_exposure AS (
+    SELECT
+        policy_id,
+        SUM(total_tiv_usd) AS total_policy_tiv,
+        COUNT(location_id) AS location_count,
+        AVG(total_tiv_usd) AS avg_location_tiv
+    FROM exposure
+    GROUP BY policy_id
+)
+
+SELECT
+    policy.policy_id,
+    policy.policy_type,
+    policy.policy_limit_usd,
+    policy_exposure.total_policy_tiv,
+    policy_exposure.location_count,
+    policy_exposure.avg_location_tiv
+FROM policy_exposure
+INNER JOIN policy
+    ON policy_exposure.policy_id = policy.policy_id
+
+WHERE policy_exposure.total_policy_tiv > (
+    SELECT AVG(total_policy_tiv)
+    FROM policy_exposure
+)
+
+AND policy_exposure.location_count >= 3
+
+ORDER BY policy_exposure.total_policy_tiv DESC;
+
+
+--Which polices have the greatest concentration of exposure?
+
+SELECT
+    exposure.policy_id,
+    exposure.region,
+    SUM(total_tiv_usd) AS total_policy_tiv,
+    COUNT(location_id) AS location_count
+FROM exposure
+LEFT JOIN hazard ON exposure.hazard_zone_id = hazard.hazard_zone_id
+WHERE hazard_band = 'Severe'
+GROUP BY exposure.policy_id,
+         exposure.region
+ORDER BY total_policy_tiv DESC;
+
+
+
+-- Policy limit vs exposure
+
+WITH policy_exposure AS (
+    SELECT
+        exposure.policy_id,
+        policy.policy_limit_usd,
+
+        SUM(exposure.total_tiv_usd) AS total_policy_tiv,
+        COUNT(exposure.location_id) AS location_count, -- This counts how many exposure locations belong to each policy.
+
+        SUM( -- Calculates the sum of those severe tiv's
+            CASE
+                WHEN hazard.hazard_band = 'Severe' -- Only selecting polcies where SEVERE
+                THEN exposure.total_tiv_usd
+                ELSE 0
+            END
+        ) AS severe_tiv
+
+    FROM exposure -- From exposure as it connects the hazard and policy tables with common fields
+
+    LEFT JOIN policy
+        ON exposure.policy_id = policy.policy_id -- Joined by policy_id as there is no common policy_limit
+
+    LEFT JOIN hazard
+        ON exposure.hazard_zone_id = hazard.hazard_zone_id -- Exposure tells which hazard zone a location belongs to
+                                                           -- Hazard tells information about that zone
+                                                           -- This also allows the CASE to access the hazard band
+
+    GROUP BY
+        exposure.policy_id, -- Grouping by policy_id adds all locations together belonging to each policy
+        policy.policy_limit_usd -- Inlcuidng this but not aggregating
+)
+
+SELECT
+    policy_exposure.policy_id,
+    policy_exposure.policy_limit_usd,
+    policy_exposure.total_policy_tiv,
+    policy_exposure.location_count,
+    policy_exposure.severe_tiv,
+   
+    policy_exposure.total_policy_tiv / -- Dividing the total_policy_tiv by the policy_limit gives the ratio
+        NULLIF(policy_exposure.policy_limit_usd, 0) AS exposure_to_limit_ratio -- NUll used so if something like 40/0 occurs it retunrs NULL.
+
+FROM policy_exposure
+
+ORDER BY policy_exposure.total_policy_tiv DESC;
