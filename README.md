@@ -107,6 +107,7 @@ Which regions have the greatest concentration of insured exposure?
 
 This analysis aggregates location-level exposure by region to calculate the total insured value (TIV) and number of insured locations.
 
+```sql
 SELECT
     exposure.region,
     SUM(exposure.total_tiv_usd) AS total_tiv,
@@ -120,6 +121,7 @@ Which regions have the greatest concentration of Severe hazard exposure?
 
 This analysis aggregates location-level exposure by region with greatest concentration of severe hazard exposure.
 
+```sql
 WITH exposure_region AS(
     SELECT
         exposure.region,
