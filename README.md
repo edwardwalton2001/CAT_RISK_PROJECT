@@ -153,4 +153,90 @@ FROM exposure_region
 ORDER BY exposure_region.total_tiv DESC; -- Ordering by the total_tiv in a descending order.
 ```
 
+## 3. Exposure vs Policy Limit 
+
+Which policies have the greatest insured exposure relative to their policy limits, and how much of that exposure is located in Severe hazard zones?
+
+This analysis aggregates location-level exposure data to the policy level. It calculates total insured value (TIV), the number of insured locations, TIV located in Severe hazard zones, and the ratio between total TIV and the policy limit.
+
+
+
+sql```
+WITH policy_exposure AS (
+    SELECT
+        exposure.policy_id,
+        policy.policy_limit_usd,
+
+        SUM(exposure.total_tiv_usd) AS total_policy_tiv,
+        COUNT(exposure.location_id) AS location_count, -- This counts how many exposure locations belong to each policy.
+
+        SUM( -- Calculates the sum of those severe tiv's
+            CASE
+                WHEN hazard.hazard_band = 'Severe' -- Only selecting polcies where SEVERE
+                THEN exposure.total_tiv_usd
+                ELSE 0
+            END
+        ) AS severe_tiv
+
+    FROM exposure -- From exposure as it connects the hazard and policy tables with common fields
+
+    LEFT JOIN policy
+        ON exposure.policy_id = policy.policy_id -- Joined by policy_id as there is no common policy_limit
+
+    LEFT JOIN hazard
+        ON exposure.hazard_zone_id = hazard.hazard_zone_id -- Exposure tells which hazard zone a location belongs to
+                                                           -- Hazard tells information about that zone
+                                                           -- This also allows the CASE to access the hazard band
+
+    GROUP BY
+        exposure.policy_id, -- Grouping by policy_id adds all locations together belonging to each policy
+        policy.policy_limit_usd -- Inlcuidng this but not aggregating
+)
+
+SELECT
+    policy_exposure.policy_id,
+    policy_exposure.policy_limit_usd,
+    policy_exposure.total_policy_tiv,
+    policy_exposure.location_count,
+    policy_exposure.severe_tiv,
+   
+    policy_exposure.total_policy_tiv / -- Dividing the total_policy_tiv by the policy_limit gives the ratio
+        NULLIF(policy_exposure.policy_limit_usd, 0) AS exposure_to_limit_ratio -- NUll used so if something like 40/0 occurs it retunrs NULL.
+
+FROM policy_exposure
+
+ORDER BY policy_exposure.total_policy_tiv DESC;
+
+
+-- Which regions have the greatest concentration of Severe hazard exposure?
+ 
+WITH exposure_region AS(
+    SELECT
+        exposure.region,
+        SUM(total_tiv_usd) AS total_tiv, -- Total tiv from all locations in the region
+    SUM(
+        CASE
+            WHEN hazard_band = 'Severe'
+            THEN exposure.total_tiv_usd
+            ELSE 0 
+        END
+    ) AS severe_tiv, -- SUM of tiv in severe locations
+    
+    SUM(
+        CASE
+            WHEN hazard.hazard_band = 'Severe'
+            THEN 1
+            ELSE 0
+        END
+        ) AS severe_location_count -- Using SUM to add up each severe location assigning 'severe' = 1. Adds up each 1 for every region to see which has the most severe locations.
+    FROM Exposure
+    
+    LEFT JOIN hazard ON exposure.hazard_zone_id = hazard.hazard_zone_id
+    
+    GROUP BY exposure.region
+)
+SELECT *
+FROM exposure_region
+ORDER BY exposure_region.total_tiv DESC;
+```
 
