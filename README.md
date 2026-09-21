@@ -256,12 +256,14 @@ The results are ranked by hazard-zone TIV in descending order, allowing the larg
 
 ```sql
 
-WITH policy_exposure AS (
+WITH policy_exposure AS ( -- Aggregates location level exposure at policy level.
     SELECT
         exposure.policy_id,
         policy.policy_limit_usd,
-        SUM(total_tiv_usd) AS total_policy_tiv,
-        COUNT(location_id) AS location_count
+        
+        SUM(total_tiv_usd) AS total_policy_tiv, -- Calculates the total TIV across all locations belonging to each policy.
+        
+        COUNT(location_id) AS location_count -- Counts how many locations belong to that policy.
     FROM exposure
 
     JOIN policy ON 
@@ -271,13 +273,16 @@ WITH policy_exposure AS (
              policy.policy_limit_usd
 ),
 
-policy_hazard_exposure AS(
+policy_hazard_exposure AS( -- Aggregates exposure by policy and hazard zone.
     SELECT
         exposure.policy_id,
         exposure.hazard_zone_id,
         hazard.hazard_band,
-        SUM(exposure.total_tiv_usd) AS zone_tiv,
-        COUNT(exposure.location_id) AS location_count
+
+        SUM(exposure.total_tiv_usd) AS zone_tiv,-- Calculates TIV for each policy within each individual hazard zone.
+
+        COUNT(exposure.location_id) AS zone_location_count -- Counts the locations for each policy within each hazard zone.
+    
     FROM exposure
 
     LEFT JOIN hazard ON exposure.hazard_zone_id = hazard.hazard_zone_id
@@ -289,11 +294,11 @@ policy_hazard_exposure AS(
 
 )  
 
-SELECT 
+SELECT -- Combines policy-level exposure with hazard-zone exposure to measure concentration within each policy.
     policy_exposure.policy_id,
     policy_exposure.total_policy_tiv,
     policy_exposure.policy_limit_usd,
-    policy_hazard_exposure.location_count,
+    policy_hazard_exposure.zone_location_count,
     policy_hazard_exposure.hazard_band,
     policy_hazard_exposure.zone_tiv,
     policy_hazard_exposure.hazard_zone_id,
@@ -301,11 +306,11 @@ SELECT
     
 (
     policy_hazard_exposure.zone_tiv/
-        NULLIF(policy_exposure.total_policy_tiv,0) 
+        NULLIF(policy_exposure.total_policy_tiv,0)  -- Dividing zone tiv by total policy tiv to calculate the percentage of the policy's total TIV that is concentrated within that specific hazard zone.
 )*100.00 AS hazard_zone_share_of_policy_tiv,
 
 policy_hazard_exposure.zone_tiv/
-    NULLIF(policy_exposure.policy_limit_usd,0) AS zone_tiv_to_limit_ratio
+    NULLIF(policy_exposure.policy_limit_usd,0) AS zone_tiv_to_limit_ratio -- Calculates the hazard-zone TIV relative to the policy limit.
 
 FROM policy_exposure
 
@@ -314,16 +319,16 @@ JOIN policy_hazard_exposure ON policy_hazard_exposure.policy_id = policy_exposur
 
 WHERE   (
         policy_hazard_exposure.zone_tiv/
-        NULLIF(policy_exposure.total_policy_tiv,0) 
+        NULLIF(policy_exposure.total_policy_tiv,0) -- Filters for cases where at least 25% of the policy's total TIV is concentrated within one specfic hazard zone.
 ) *100.00>= 25
 
 
 AND     (
         policy_hazard_exposure.zone_tiv/
-        NULLIF(policy_exposure.policy_limit_usd,0)
+        NULLIF(policy_exposure.policy_limit_usd,0) -- Filters for cases where the hazard-zone TIV is equal to or exceeds the policy limit.
 ) >= 1
 
 
-ORDER BY policy_hazard_exposure.zone_tiv DESC,
+ORDER BY policy_hazard_exposure.zone_tiv DESC, 
          zone_tiv_to_limit_ratio DESC;
 ```
