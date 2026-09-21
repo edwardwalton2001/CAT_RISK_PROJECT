@@ -232,7 +232,7 @@ SELECT
     policy_exposure.location_count,
     policy_exposure.avg_location_tiv
 FROM policy_exposure
-INNER JOIN policy
+INNER JOIN policy -- Using inner join as only require valid policies with corresponding policy information for this analysis.
     ON policy_exposure.policy_id = policy.policy_id
 
 WHERE policy_exposure.total_policy_tiv > ( -- Finds policies where the total TIV is greater than the average
@@ -240,7 +240,7 @@ WHERE policy_exposure.total_policy_tiv > ( -- Finds policies where the total TIV
     FROM policy_exposure
 )
 
-AND policy_exposure.location_count >= 3
+AND policy_exposure.location_count >= 3 -- Only selects policies with at least 3 locations
 
 ORDER BY policy_exposure.total_policy_tiv DESC;
 ```
