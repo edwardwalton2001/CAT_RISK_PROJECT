@@ -12,6 +12,7 @@ The project focuses on questions such as:
 - Which regions have the greatest concentration of Severe hazard exposure?
 - Which policies have high exposure relative to their policy limits?
 - Which construction types have the greatest exposure to Severe hazard zones?
+- Which policy and hazard-zone combinations represent the greatest accumulation risk?
 - How many insured locations are exposed to higher hazard levels?
 - How much TIV is located in Severe hazard zones?
 
@@ -243,4 +244,86 @@ WHERE policy_exposure.total_policy_tiv > ( -- Finds policies where the total TIV
 AND policy_exposure.location_count >= 3 -- Only selects policies with at least 3 locations
 
 ORDER BY policy_exposure.total_policy_tiv DESC;
+```
+
+## 5. Policy and hazard zone risk
+
+Which policy and hazard-zone combinations represent the greatest accumulation risk?
+
+This analysis aggregates exposure at the policy and hazard-zone level to identify policies with significant exposure concentrated within individual hazard zones. It highlights policy and hazard-zone combinations where more than 25% of the policy's total TIV is located within a single zone and where the hazard-zone TIV equals or exceeds the policy limit.
+
+The results are ranked by hazard-zone TIV in descending order, allowing the largest exposure accumulations to be identified first. The hazard band is also included to provide additional context on the hazard characteristics associated with each concentration.
+
+```sql
+
+WITH policy_exposure AS (
+    SELECT
+        exposure.policy_id,
+        policy.policy_limit_usd,
+        SUM(total_tiv_usd) AS total_policy_tiv,
+        COUNT(location_id) AS location_count
+    FROM exposure
+
+    JOIN policy ON 
+        exposure.policy_id = policy.policy_id
+    
+    GROUP BY exposure.policy_id,
+             policy.policy_limit_usd
+),
+
+policy_hazard_exposure AS(
+    SELECT
+        exposure.policy_id,
+        exposure.hazard_zone_id,
+        hazard.hazard_band,
+        SUM(exposure.total_tiv_usd) AS zone_tiv,
+        COUNT(exposure.location_id) AS location_count
+    FROM exposure
+
+    LEFT JOIN hazard ON exposure.hazard_zone_id = hazard.hazard_zone_id
+
+    GROUP BY 
+    exposure.policy_id,
+    exposure.hazard_zone_id,
+    hazard.hazard_band
+
+)  
+
+SELECT 
+    policy_exposure.policy_id,
+    policy_exposure.total_policy_tiv,
+    policy_exposure.policy_limit_usd,
+    policy_hazard_exposure.location_count,
+    policy_hazard_exposure.hazard_band,
+    policy_hazard_exposure.zone_tiv,
+    policy_hazard_exposure.hazard_zone_id,
+    
+    
+(
+    policy_hazard_exposure.zone_tiv/
+        NULLIF(policy_exposure.total_policy_tiv,0) 
+)*100.00 AS hazard_zone_share_of_policy_tiv,
+
+policy_hazard_exposure.zone_tiv/
+    NULLIF(policy_exposure.policy_limit_usd,0) AS zone_tiv_to_limit_ratio
+
+FROM policy_exposure
+
+JOIN policy_hazard_exposure ON policy_hazard_exposure.policy_id = policy_exposure.policy_id
+
+
+WHERE   (
+        policy_hazard_exposure.zone_tiv/
+        NULLIF(policy_exposure.total_policy_tiv,0) 
+) *100.00>= 25
+
+
+AND     (
+        policy_hazard_exposure.zone_tiv/
+        NULLIF(policy_exposure.policy_limit_usd,0)
+) >= 1
+
+
+ORDER BY policy_hazard_exposure.zone_tiv DESC,
+         zone_tiv_to_limit_ratio DESC;
 ```
