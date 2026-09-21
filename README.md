@@ -204,37 +204,5 @@ SELECT
 FROM policy_exposure
 
 ORDER BY policy_exposure.total_policy_tiv DESC;
-
-
--- Which regions have the greatest concentration of Severe hazard exposure?
- 
-WITH exposure_region AS(
-    SELECT
-        exposure.region,
-        SUM(total_tiv_usd) AS total_tiv, -- Total tiv from all locations in the region
-    SUM(
-        CASE
-            WHEN hazard_band = 'Severe'
-            THEN exposure.total_tiv_usd
-            ELSE 0 
-        END
-    ) AS severe_tiv, -- SUM of tiv in severe locations
-    
-    SUM(
-        CASE
-            WHEN hazard.hazard_band = 'Severe'
-            THEN 1
-            ELSE 0
-        END
-        ) AS severe_location_count -- Using SUM to add up each severe location assigning 'severe' = 1. Adds up each 1 for every region to see which has the most severe locations.
-    FROM Exposure
-    
-    LEFT JOIN hazard ON exposure.hazard_zone_id = hazard.hazard_zone_id
-    
-    GROUP BY exposure.region
-)
-SELECT *
-FROM exposure_region
-ORDER BY exposure_region.total_tiv DESC;
 ```
 
