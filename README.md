@@ -9,10 +9,11 @@ PostgreSQL is used to join, aggregate, and analyse the datasets to identify area
 The project focuses on questions such as:
 
 - Which regions have the greatest concentration of insured exposure?
-- How much TIV is located in Severe hazard zones?
+- Which regions have the greatest concentration of Severe hazard exposure?
 - Which policies have high exposure relative to their policy limits?
 - Which construction types have the greatest exposure to Severe hazard zones?
 - How many insured locations are exposed to higher hazard levels?
+- How much TIV is located in Severe hazard zones?
 
 - ## Tools Used
 
@@ -113,3 +114,39 @@ SELECT
 FROM exposure
 GROUP BY exposure.region
 ORDER BY total_tiv DESC;
+
+## 2. Exposure by 'Severe' hazard
+Which regions have the greatest concentration of Severe hazard exposure?
+
+This analysis aggregates location-level exposure by region with greatest concentration of severe hazard exposure.
+
+WITH exposure_region AS(
+    SELECT
+        exposure.region,
+        SUM(total_tiv_usd) AS total_tiv, -- Total tiv from all locations in the region
+    SUM(
+        CASE
+            WHEN hazard_band = 'Severe'
+            THEN exposure.total_tiv_usd
+            ELSE 0 
+        END
+    ) AS severe_tiv, -- SUM of tiv in severe locations
+    
+    SUM(
+        CASE
+            WHEN hazard.hazard_band = 'Severe'
+            THEN 1
+            ELSE 0
+        END
+        ) AS severe_location_count -- Using SUM to add up each severe location assigning 'severe' = 1. Adds up each 1 for every region to see which                                        has the most severe locations.
+    FROM Exposure
+    
+    LEFT JOIN hazard ON exposure.hazard_zone_id = hazard.hazard_zone_id
+    
+    GROUP BY exposure.region
+)
+SELECT *
+FROM exposure_region
+ORDER BY exposure_region.total_tiv DESC; -- Ordering by the total_tiv in a descending order.
+
+
