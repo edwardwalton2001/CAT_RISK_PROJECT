@@ -159,9 +159,7 @@ Which policies have the greatest insured exposure relative to their policy limit
 
 This analysis aggregates location-level exposure data to the policy level. It calculates total insured value (TIV), the number of insured locations, TIV located in Severe hazard zones, and the ratio between total TIV and the policy limit.
 
-
-
-sql```
+```sql
 WITH policy_exposure AS (
     SELECT
         exposure.policy_id,
