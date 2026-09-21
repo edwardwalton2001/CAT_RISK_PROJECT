@@ -115,6 +115,7 @@ SELECT
 FROM exposure
 GROUP BY exposure.region
 ORDER BY total_tiv DESC;
+```markdown
 
 ## 2. Exposure by 'Severe' hazard
 Which regions have the greatest concentration of Severe hazard exposure?
@@ -150,5 +151,6 @@ WITH exposure_region AS(
 SELECT *
 FROM exposure_region
 ORDER BY exposure_region.total_tiv DESC; -- Ordering by the total_tiv in a descending order.
+```markdown
 
 
