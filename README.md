@@ -170,7 +170,7 @@ WITH policy_exposure AS (
 
         SUM( -- Calculates the sum of those severe tiv's
             CASE
-                WHEN hazard.hazard_band = 'Severe' -- Only selecting polcies where SEVERE
+                WHEN hazard.hazard_band = 'Severe' -- Includes TIV only from Severe hazard locations
                 THEN exposure.total_tiv_usd
                 ELSE 0
             END
