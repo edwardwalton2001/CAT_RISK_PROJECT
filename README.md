@@ -206,3 +206,41 @@ FROM policy_exposure
 ORDER BY policy_exposure.total_policy_tiv DESC;
 ```
 
+## 4. Average policy TIV 
+
+Which policies have above-average total TIV and at least 3 insured locations?
+
+This analysis aggregates exposure at the policy level and identifies policies with above-average total TIV and at least three insured locations. It also shows each policy's type, policy limit, location count, and average TIV per location.
+
+```sql
+
+WITH policy_exposure AS (
+    SELECT
+        policy_id,
+        SUM(total_tiv_usd) AS total_policy_tiv,
+        COUNT(location_id) AS location_count,
+        AVG(total_tiv_usd) AS avg_location_tiv
+    FROM exposure
+    GROUP BY policy_id
+)
+
+SELECT
+    policy.policy_id,
+    policy.policy_type,
+    policy.policy_limit_usd,
+    policy_exposure.total_policy_tiv,
+    policy_exposure.location_count,
+    policy_exposure.avg_location_tiv
+FROM policy_exposure
+INNER JOIN policy
+    ON policy_exposure.policy_id = policy.policy_id
+
+WHERE policy_exposure.total_policy_tiv > ( -- Finds policies where the total TIV is greater than the average
+    SELECT AVG(total_policy_tiv)
+    FROM policy_exposure
+)
+
+AND policy_exposure.location_count >= 3
+
+ORDER BY policy_exposure.total_policy_tiv DESC;
+```
