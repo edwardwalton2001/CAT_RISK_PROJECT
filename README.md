@@ -109,8 +109,8 @@ This analysis aggregates location-level exposure by region to calculate the tota
 ```sql
 SELECT
     exposure.region,
-    SUM(exposure.total_tiv_usd) AS total_tiv,
-    COUNT(exposure.location_id) AS location_count
+    SUM(exposure.total_tiv_usd) AS total_tiv, -- Calculates TIV across all locations in each region
+    COUNT(exposure.location_id) AS location_count -- Counts number of locations within each region
 FROM exposure
 GROUP BY exposure.region
 ORDER BY total_tiv DESC;
@@ -132,7 +132,8 @@ WITH exposure_region AS(
             THEN exposure.total_tiv_usd
             ELSE 0 
         END
-    ) AS severe_tiv, -- SUM of tiv in severe locations
+    ) AS severe_tiv, -- Calculates the amount of regional TIV located within Severe hazard zones
+
     
     SUM(
         CASE
@@ -140,11 +141,11 @@ WITH exposure_region AS(
             THEN 1
             ELSE 0
         END
-        ) AS severe_location_count -- Using SUM to add up each severe location assigning 'severe' = 1. Adds up each 1 for every region to see which                                        has the most severe locations.
+        ) AS severe_location_count -- Counts the number of locations within Severe hazard zones for each region
+
     FROM Exposure
     
-    LEFT JOIN hazard ON exposure.hazard_zone_id = hazard.hazard_zone_id
-    
+    LEFT JOIN hazard ON exposure.hazard_zone_id = hazard.hazard_zone_id -- Joining exposure table on hazard by hazard_zone_id in order to access                                                                                hazard_band.
     GROUP BY exposure.region
 )
 SELECT *
