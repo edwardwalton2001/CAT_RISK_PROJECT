@@ -117,7 +117,7 @@ ORDER BY total_tiv DESC;
 ```
 
 ## 2. Exposure by 'Severe' hazard
-Which regions have the greatest concentration of Severe hazard exposure?
+Which regions have the greatest concentration of severe hazard exposure?
 
 This analysis aggregates location-level exposure by region with greatest concentration of severe hazard exposure.
 
