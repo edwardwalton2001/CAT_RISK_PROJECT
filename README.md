@@ -14,7 +14,7 @@ The project focuses on questions such as:
 - Which policy and hazard-zone combinations represent the greatest accumulation risk?
 - Which states have the greatest concentration of insured value, and how dependent is each state's exposure on its largest hazard zone?
 
-- ## Tools Used
+## Tools Used
 
 - PostgreSQL
 - SQL
@@ -23,7 +23,7 @@ The project focuses on questions such as:
 - Excel
 - GitHub
 
-- ## Dataset
+## Dataset
 
 The project uses three datasets:
 
@@ -38,7 +38,7 @@ The project uses three datasets:
 
 The database consists of three related tables: `exposure`, `policy`, and `hazard`.
 
-## Policy Table
+### Policy Table
 
 | Column | Data Type |
 |---|---|
@@ -52,7 +52,7 @@ The database consists of three related tables: `exposure`, `policy`, and `hazard
 | limit_basis | VARCHAR(50) |
 | policy_status | VARCHAR(50) |
 
-## Hazard Table
+### Hazard Table
 
 | Column | Data Type |
 |---|---|
@@ -66,7 +66,7 @@ The database consists of three related tables: `exposure`, `policy`, and `hazard
 | composite_hazard_score | NUMERIC(10,2) |
 | hazard_band | VARCHAR(50) |
 
-## Exposure Table
+### Exposure Table
 
 | Column | Data Type |
 |---|---|
@@ -88,11 +88,10 @@ The database consists of three related tables: `exposure`, `policy`, and `hazard
 | business_interruption_tiv_usd | BIGINT |
 | total_tiv_usd | BIGINT |
 
-## Table Relationships
+### Table Relationships
 
-exposure.policy_id - policy.policy_id`
-
-exposure.hazard_zone_id - hazard.hazard_zone_id
+- exposure.policy_id → policy.policy_id
+- exposure.hazard_zone_id → `hazard.hazard_zone_id
 
 Exposure sits as the central table connecting both policy and hazard with common fields.
 
