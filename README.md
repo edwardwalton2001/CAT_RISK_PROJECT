@@ -446,6 +446,26 @@ Checks included:
 - Zero or negative TIV values
 - Missing hazard-zone classifications
 
+### TIV Reconciliation
+
+The reported total TIV was compared with the sum of building, contents and business interruption TIV for each insured location.
+
+```sql
+SELECT
+    exposure.location_id,
+    exposure.building_tiv_usd,
+    exposure.contents_tiv_usd,
+    exposure.business_interruption_tiv_usd,
+    exposure.total_tiv_usd
+FROM exposure
+WHERE exposure.total_tiv_usd <>
+      exposure.building_tiv_usd
+      + exposure.contents_tiv_usd
+      + exposure.business_interruption_tiv_usd;
+```
+
+**Result:** No discrepancies were identified, indicating that the reported total TIV matched with its component values across all locations.
+
 ## Skills Demonstrated
 
 ### SQL
