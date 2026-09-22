@@ -9,7 +9,7 @@ PostgreSQL is used to join, aggregate, and analyse the datasets to identify area
 The project focuses on questions such as:
 
 - Which regions have the greatest concentration of insured exposure?
-- Which regions have the greatest concentration of Severe hazard exposure?
+- Which regions have the greatest concentration of severe hazard exposure?
 - Which policies have high exposure relative to their policy limits?
 - Which policy and hazard-zone combinations represent the greatest accumulation risk?
 - Which states have the greatest concentration of insured value, and how dependent is each state's exposure on its largest hazard zone?
