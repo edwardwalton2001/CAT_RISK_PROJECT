@@ -418,7 +418,9 @@ ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of 
 - **Policy–Hazard Zone Concentration:** Policy POL00275 had the largest qualifying hazard-zone exposure, with $8,580,608 of TIV concentrated in            one hazard zone. This represents 33% of the policy's total TIV and 3.4x its policy limit.
 - **Concentration Relative to Policy Limit:**
            **Largest Policy Exposure:** POL00097 had the highest total policy TIV at approximately $30.6 million across seven insured locations. Its                 total TIV was approximately 3.1x its $10 million policy limit, with around $4.0 million located in Severe hazard zones.
+  
            **Highest Exposure-to-Limit Ratio:** POL00308 had the highest exposure-to-limit ratio at approximately 19.1x, with $19.1 million of total                 TIV compared with a $1 million policy limit. Approximately $10.0 million of this exposure was located in Severe hazard zones.
+  
            **Largest Severe Hazard Exposure:** POL00275 had the highest Severe-zone TIV at approximately $20.2 million out of $26.0 million in total                 policy TIV. This means roughly 77.7% of the policy's insured value was associated with Severe hazard zones, while its total TIV was                  approximately 10.4x its $2.5 million policy limit.
 
 - **State-Hazard Zone Concentration:** New Jersey had the highest total state exposure, with approximately $273.7 million in TIV. However, Texas         showed the greatest concentration within a single hazard zone, with its largest hazard zone accounting for approximately 17% of the state's          total TIV.
