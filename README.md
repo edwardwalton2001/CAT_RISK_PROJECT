@@ -431,7 +431,7 @@ WHERE ranked_zones.zone_rank = 1 -- Keeps only the hazard zone with the largest 
 ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of total state TIV
 ```
 ## Key Findings
-- **Regional Exposure:** The **East** region has the highest concentration of general exposure **($804.3 million)**, whilst the **North** has the         least **($477.2 million)**.
+- **Regional Exposure:** The **East** region has the largest overall exposure **($804.3 million)**, whilst the **North** has the         least **($477.2 million)**.
 - **Policy Exposure:** **POL00097** had the largest total insured value at approximately **$30.6 million** distributed across 7 insured locations.      Its total TIV represented 3 times the policy limit.
 * **Severe Hazard Exposure by Region:**
 
