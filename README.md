@@ -118,7 +118,7 @@ GROUP BY exposure.region
 ORDER BY total_tiv DESC;
 ```
 
-## 2. Exposure by 'Severe' hazard
+## 2. Severe Hazard Exposure by Region
 Which regions have the greatest concentration of severe hazard exposure?
 
 This analysis aggregates location-level exposure by region with greatest concentration of severe hazard exposure.
@@ -267,7 +267,7 @@ AND policy_exposure.location_count >= 3 -- Only selects policies with at least 3
 ORDER BY policy_exposure.total_policy_tiv DESC;
 ```
 
-## 5. Policy and hazard zone risk
+## 5. Policy Hazard-Zone Exposure Concentration
 
 Which policy and hazard-zone combinations represent the greatest accumulation risk?
 
@@ -436,7 +436,7 @@ ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of 
 - **Policy Exposure:** **POL00097** had the largest total insured value at approximately **$30.6 million** distributed across 7 insured locations.      Its total TIV represented 3 times the policy limit.
 * **Severe Hazard Exposure by Region:**
 
-  * **Highest Severe Exposure Concentration:** **East** had the highest relative concentration of severe hazard exposure, with approximately **40%** of its total TIV** located within severe hazard zones. This represented approximately **$327 million in Severe TIV** across **108 insured locations**. **East** also had the largest absolute exposure concentration.
+  * **Highest Severe Exposure Concentration:** **East** had the highest relative concentration of severe hazard exposure, with approximately **40% of its total TIV** located within severe hazard zones. This represented approximately **$327 million in Severe TIV** across **108 insured locations**. **East** also had the largest absolute exposure concentration.
 
 * **Policy Hazard-Zone Concentration:**
 
