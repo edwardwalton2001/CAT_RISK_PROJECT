@@ -124,37 +124,51 @@ Which regions have the greatest concentration of severe hazard exposure?
 This analysis aggregates location-level exposure by region with greatest concentration of severe hazard exposure.
 
 ```sql
-WITH exposure_region AS(
+WITH exposure_region AS ( -- Aggregates location-level exposure to one row per region
     SELECT
         exposure.region,
-        SUM(total_tiv_usd) AS total_tiv, -- Calculates total TIV from all locations in the region.
-    SUM(
-        CASE
-            WHEN hazard_band = 'Severe'
-            THEN exposure.total_tiv_usd
-            ELSE 0 
-        END
-    ) AS severe_tiv, -- Calculates the amount of regional TIV located within Severe hazard zones.
 
-    
-    SUM(
-        CASE
-            WHEN hazard.hazard_band = 'Severe'
-            THEN 1
-            ELSE 0
-        END
+        SUM(exposure.total_tiv_usd) AS total_tiv, -- Calculates total TIV across all locations within each region
+
+        SUM(
+            CASE
+                WHEN hazard.hazard_band = 'Severe'
+                THEN exposure.total_tiv_usd
+                ELSE 0 
+            END
+        ) AS severe_tiv, -- Calculates the amount of regional TIV located within Severe hazard zones
+
+        SUM(
+            CASE
+                WHEN hazard.hazard_band = 'Severe'
+                THEN 1
+                ELSE 0
+            END
         ) AS severe_location_count -- Counts the number of locations within Severe hazard zones for each region
 
-    FROM Exposure
+    FROM exposure
     
-    LEFT JOIN hazard ON exposure.hazard_zone_id = hazard.hazard_zone_id -- Joining exposure table on hazard by hazard_zone_id in order to access                                                                                hazard_band.
+    LEFT JOIN hazard 
+        ON exposure.hazard_zone_id = hazard.hazard_zone_id -- Adds the hazard classification associated with each exposure location
+    
     GROUP BY exposure.region
 )
-SELECT *
+
+SELECT
+    exposure_region.region,
+    exposure_region.total_tiv,
+    exposure_region.severe_tiv,
+    exposure_region.severe_location_count,
+
+    (
+        exposure_region.severe_tiv /
+        NULLIF(exposure_region.total_tiv, 0)
+    ) * 100.00 AS severe_tiv_percentage -- Calculates the percentage of each region's total TIV located within Severe hazard zones
 
 FROM exposure_region
 
-ORDER BY exposure_region.total_tiv DESC; -- Ordering by the total_tiv in a descending order.
+ORDER BY severe_tiv_percentage DESC;
+-- Ranks regions from highest to lowest Severe hazard exposure concentration
 ```
 
 ## 3. Exposure vs Policy Limit 
