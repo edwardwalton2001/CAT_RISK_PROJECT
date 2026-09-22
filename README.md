@@ -415,7 +415,12 @@ ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of 
 - **Policy Exposure:** POL00097 had the largest total insured value at approximately $30,643,573 distributed across 7 insured locations. Its total
       TIV represented 3 times the policy limit.
 - **Severe Hazard Exposure:** POL00275 had $8,586,508 of TIV located within Severe hazard zones, representing 78% of its total policy exposure.
-- **Policy–Hazard Zone Concentration:** Policy POL00275 had the largest qualifying hazard-zone exposure, with $8,580,608 of TIV concentrated in            one hazard zone. This represents 33% of the policy's total TIV and 3.4x its policy limit.
+* **Policy Hazard-Zone Concentration:**
+
+  * **Largest Hazard-Zone Exposure:** POL00275 had the largest qualifying hazard-zone exposure, with approximately **$8.6 million in TIV** concentrated within **HZ-W-07**, a **Severe** hazard zone. This represented approximately **32.9%** of the policy's total TIV and **3.4x** its $2.5 million policy limit.
+  * **Highest Zone TIV-to-Limit Ratio:** POL00072 had the highest zone TIV-to-limit ratio at approximately **6.4x**. Its hazard zone, **HZ-C-11**, contained approximately **$6.4 million in TIV**, representing **43.6%** of the policy's total exposure. However, this exposure was associated with a **Low** hazard band, demonstrating that a high exposure-to-limit ratio does not necessarily correspond to high hazard severity.
+  * **High Concentration and High Hazard:** POL00169 had approximately **64.3%** of its total policy TIV concentrated within **HZ-E-20**, a **High** hazard zone. The zone contained approximately **$5.9 million in TIV**, equivalent to **5.9x** the policy's $1 million limit.
+  * **Fully Concentrated Policies:** Several qualifying policies had **100% of their total TIV concentrated within a single hazard zone**, demonstrating cases where all insured value associated with the policy was located within one zone. These cases occurred across different hazard bands, including Low, Moderate and Severe.
 * **Concentration Relative to Policy Limit:**
 
   * **Largest Policy Exposure:** POL00097 had the highest total policy TIV at approximately **$30.6 million** across seven insured locations. Its total TIV was approximately **3.1x** its **$10 million policy limit**, with around **$4.0 million** located in Severe hazard zones.
