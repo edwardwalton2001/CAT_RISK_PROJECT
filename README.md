@@ -422,6 +422,12 @@ ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of 
   * **Highest Exposure-to-Limit Ratio:** POL00308 had the highest exposure-to-limit ratio at approximately **19.1x**, with **$19.1 million** in total TIV compared with a **$1 million policy limit**. Approximately **$10.0 million** of this exposure was located in Severe hazard zones.
   * **Largest Severe Hazard Exposure:** POL00275 had the highest Severe-zone TIV at approximately **$20.2 million** out of **$26.0 million** in total policy TIV. This means approximately **77.7%** of the policy's insured value was associated with Severe hazard zones, while its total TIV was approximately **10.4x** its **$2.5 million policy limit**.
 
-- **State-Hazard Zone Concentration:** New Jersey had the highest total state exposure, with approximately $273.7 million in TIV. However, Texas         showed the greatest concentration within a single hazard zone, with its largest hazard zone accounting for approximately 17% of the state's          total TIV.
+* **State-Hazard Zone Concentration:**
+
+* * **Highest Total State Exposure:** New Jersey had the largest overall exposure, with approximately **$273.7 million in total TIV** across **85 insured locations**. Its largest hazard zone, HZ-E-09, contained approximately **$29.4 million**, representing **10.8%** of the state's total TIV.
+* **Greatest Hazard-Zone Concentration:** Texas showed the greatest dependence on a single hazard zone. Hazard zone HZ-S-06 contained approximately **$35.3 million in TIV**, representing **17.2%** of Texas's total state TIV. This was also the largest individual zone TIV among the states analysed.
+* **Other Notable Concentrations:** Pennsylvania and Massachusetts had the next-highest single-zone concentrations, with their largest hazard zones accounting for approximately **13.7%** and **13.2%** of total state TIV, respectively.
+* **Lowest Hazard-Zone Concentration:** Louisiana had the lowest concentration within its largest hazard zone at approximately **9.6%**, indicating that its exposure was more dispersed across hazard zones than the other states analysed.
+
 - **Exposure Distribution:** The analysis identified differences in both the absolute amount and relative concentration of Severe hazard exposure          across regions, demonstrating why total TIV and hazard concentration should be considered separately.
 
