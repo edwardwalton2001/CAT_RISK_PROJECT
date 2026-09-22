@@ -90,7 +90,7 @@ The database consists of three related tables: `exposure`, `policy`, and `hazard
 ### Table Relationships
 
 - exposure.policy_id → policy.policy_id
-- exposure.hazard_zone_id → `hazard.hazard_zone_id
+- exposure.hazard_zone_id → hazard.hazard_zone_id
 
 Exposure sits as the central table connecting both policy and hazard with common fields.
 
@@ -118,7 +118,7 @@ ORDER BY total_tiv DESC;
 ```
 
 ## 2. Severe Hazard Exposure by Region
-Which regions have the greatest concentration of severe hazard exposure?
+Which regions have the greatest proportion of insured value located within Severe hazard zones?
 
 This analysis aggregates location-level exposure by region with greatest concentration of severe hazard exposure.
 
