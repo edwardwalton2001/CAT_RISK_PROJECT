@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project analyses a simulated insurance exposure portfolio to identify catastrophe risk concentrations across policies, geographic regions, hazard zones, and construction types....
+This project analyses a simulated insurance exposure portfolio to identify catastrophe risk concentrations across policies, geographic regions and hazard zones.
 The analysis uses location-level exposure data containing Total Insured Value (TIV), policy information, and hazard characteristics. 
 PostgreSQL is used to join, aggregate, and analyse the datasets to identify areas of higher exposure and potential catastrophe risk.
 
@@ -125,14 +125,14 @@ This analysis aggregates location-level exposure by region with greatest concent
 WITH exposure_region AS(
     SELECT
         exposure.region,
-        SUM(total_tiv_usd) AS total_tiv, -- Total tiv from all locations in the region
+        SUM(total_tiv_usd) AS total_tiv, -- Calculates total TIV from all locations in the region.
     SUM(
         CASE
             WHEN hazard_band = 'Severe'
             THEN exposure.total_tiv_usd
             ELSE 0 
         END
-    ) AS severe_tiv, -- Calculates the amount of regional TIV located within Severe hazard zones
+    ) AS severe_tiv, -- Calculates the amount of regional TIV located within Severe hazard zones.
 
     
     SUM(
@@ -165,10 +165,10 @@ WITH policy_exposure AS (
         exposure.policy_id,
         policy.policy_limit_usd,
 
-        SUM(exposure.total_tiv_usd) AS total_policy_tiv,
-        COUNT(exposure.location_id) AS location_count, -- This counts how many exposure locations belong to each policy.
+        SUM(exposure.total_tiv_usd) AS total_policy_tiv, -- Calculates total TIV for each policy
+        COUNT(exposure.location_id) AS location_count, -- Counts how many exposure locations belong to each policy.
 
-        SUM( -- Calculates the sum of those severe tiv's
+        SUM(
             CASE
                 WHEN hazard.hazard_band = 'Severe' -- Includes TIV only from Severe hazard locations
                 THEN exposure.total_tiv_usd
@@ -176,19 +176,18 @@ WITH policy_exposure AS (
             END
         ) AS severe_tiv
 
-    FROM exposure -- From exposure as it connects the hazard and policy tables with common fields
+    FROM exposure 
 
     LEFT JOIN policy
-        ON exposure.policy_id = policy.policy_id -- Joined by policy_id as there is no common policy_limit
+        ON exposure.policy_id = policy.policy_id -- Adds the policy limit required for the exposure-to-limit comparison
 
-    LEFT JOIN hazard
-        ON exposure.hazard_zone_id = hazard.hazard_zone_id -- Exposure tells which hazard zone a location belongs to
-                                                           -- Hazard tells information about that zone
-                                                           -- This also allows the CASE to access the hazard band
+
+LEFT JOIN hazard
+        ON exposure.hazard_zone_id = hazard.hazard_zone_id -- Adds hazard classifications for each exposure location
 
     GROUP BY
-        exposure.policy_id, -- Grouping by policy_id adds all locations together belonging to each policy
-        policy.policy_limit_usd -- Inlcuidng this but not aggregating
+        exposure.policy_id, 
+        policy.policy_limit_usd
 )
 
 SELECT
@@ -198,12 +197,13 @@ SELECT
     policy_exposure.location_count,
     policy_exposure.severe_tiv,
    
-    policy_exposure.total_policy_tiv / -- Dividing the total_policy_tiv by the policy_limit gives the ratio
-        NULLIF(policy_exposure.policy_limit_usd, 0) AS exposure_to_limit_ratio -- NUll used so if something like 40/0 occurs it retunrs NULL.
+    policy_exposure.total_policy_tiv / -- Dividing the total_policy_tiv by the policy_limit gives the ratio.
+        NULLIF(policy_exposure.policy_limit_usd, 0) AS exposure_to_limit_ratio -- Compares total policy TIV with the policy limit while preventing                                                                                     division by zero.
+
 
 FROM policy_exposure
 
-ORDER BY policy_exposure.total_policy_tiv DESC;
+ORDER BY policy_exposure.total_policy_tiv DESC; -- Ranks policies from highest to lowest total TIV
 ```
 
 ## 4. Average policy TIV 
