@@ -13,6 +13,7 @@ The project focuses on questions such as:
 - Which policies have high exposure relative to their policy limits?
 - Which construction types have the greatest exposure to Severe hazard zones?
 - Which policy and hazard-zone combinations represent the greatest accumulation risk?
+- Which states have the greatest concentration of insured value, and how dependent is each state's exposure on its largest hazard zone?
 - How many insured locations are exposed to higher hazard levels?
 - How much TIV is located in Severe hazard zones?
 
@@ -334,7 +335,7 @@ ORDER BY policy_hazard_exposure.zone_tiv DESC,
 ```
 
 
-## 6. Hazard zone by state.
+## 6. Hazard Zone Exposure Concentration by State
 
 Which states have the greatest concentration of insured value, and how dependent is each state's exposure on its largest hazard zone?
 
