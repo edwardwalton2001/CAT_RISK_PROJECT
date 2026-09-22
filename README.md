@@ -332,3 +332,80 @@ AND     (
 ORDER BY policy_hazard_exposure.zone_tiv DESC, 
          zone_tiv_to_limit_ratio DESC;
 ```
+
+
+## 6. Hazard zone by state.
+
+Which states have the greatest concentration of insured value, and how dependent is each state's exposure on its largest hazard zone?
+
+This analysis aggregates exposure at the state and hazard-zone level to identify which states have the greatest concentration of insured value within a single hazard zone. It identifies the hazard zone with the highest TIV in each state and calculates the percentage of the state's total TIV concentrated within that zone. The results are ranked by this percentage to highlight states that are most dependent on their largest hazard-zone concentration.
+
+```sql
+
+WITH state_exposure AS(
+    SELECT
+        exposure.state,
+        
+        SUM(exposure.total_tiv_usd) AS total_state_tiv, -- Calculates TIV for each state.
+
+        COUNT(location_id) AS state_location_count -- Counts the total number of locations within each state.
+    FROM exposure
+
+    GROUP BY exposure.state
+), 
+
+state_hazard_exposure AS ( -- Aggregates exposure to one row per state and hazard-zone combination.
+    SELECT
+        exposure.state,
+        exposure.hazard_zone_id,
+        
+        SUM(exposure.total_tiv_usd) AS state_zone_tiv, -- Calculates TIV in each individual hazard zone
+        
+        COUNT(exposure.location_id) AS zone_location_count -- -- Counts locations within each state and hazard-zone combination.
+    FROM exposure
+
+    GROUP BY
+        exposure.state,
+        exposure.hazard_zone_id
+),
+
+ranked_zones AS ( -- Compares state-level exposure with hazard-zone exposure and ranks hazard zones by TIV within each state.
+    SELECT
+        state_exposure.state,
+        state_exposure.total_state_tiv,
+        state_exposure.state_location_count,
+
+        state_hazard_exposure.state_zone_tiv,
+        state_hazard_exposure.hazard_zone_id,
+        state_hazard_exposure.zone_location_count,
+
+    ROW_NUMBER() OVER ( 
+    PARTITION BY state_exposure.state -- Restarts the hazard-zone ranking for each state
+    ORDER BY state_hazard_exposure.state_zone_tiv DESC -- Ranks hazard zones from highest to lowest TIV within each state.
+    ) AS zone_rank,
+
+( 
+    state_hazard_exposure.state_zone_tiv/
+        NULLIF(state_exposure.total_state_tiv,0) -- Calculates the share of total TIV each hazard zone represent relative to the state total TIV.
+)*100 AS zone_share_tiv
+    
+    FROM state_exposure
+    
+    JOIN state_hazard_exposure ON state_exposure.state = state_hazard_exposure.state -- Joins state totals to each state's hazard-zone totals so zone exposure can be compared with overall state exposure. 
+)
+
+SELECT
+    ranked_zones.state,
+    ranked_zones.total_state_tiv,
+    ranked_zones.state_location_count,
+    ranked_zones.hazard_zone_id,
+    ranked_zones.state_zone_tiv,
+    ranked_zones.zone_location_count,
+    ranked_zones.zone_share_tiv
+       
+FROM ranked_zones
+
+WHERE ranked_zones.zone_rank = 1 -- Keeps only the hazard zone with the largest TIV within each state.
+
+ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of total state TIV
+```
