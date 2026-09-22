@@ -410,7 +410,7 @@ ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of 
 ## Key Findings
 - **Region Exposure:** The **East** region has the highest concentration of general exposure **($804.3 million)**, whilst the **North** has the         least **($477.2 million)**. The story remains the same for severe hazard exposure. However, one anomaly is the west region where it ranks third      in terms of severe_tiv but has fewer severe_tiv locations than both **Central** and **North** regions.
 - **Policy Exposure:** **POL00097** had the largest total insured value at approximately **$30.6 million** distributed across 7 insured locations.      Its total TIV represented 3 times the policy limit.
-- **Severe Hazard Exposure:** POL00275 had $8,586,508 of TIV located within Severe hazard zones, representing 78% of its total policy exposure.
+- **Severe Hazard Exposure:** **POL00275** had **$8.5 million** of TIV located within Severe hazard zones, representing **78%** of its total policy     exposure.
 * **Policy Hazard-Zone Concentration:**
 
   * **Largest Hazard-Zone Exposure:** POL00275 had the largest qualifying hazard-zone exposure, with approximately **$8.6 million in TIV** concentrated within **HZ-W-07**, a **Severe** hazard zone. This represented approximately **32.9%** of the policy's total TIV and **3.4x** its $2.5 million policy limit.
