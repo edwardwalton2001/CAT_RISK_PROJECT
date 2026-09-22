@@ -447,7 +447,7 @@ Checks included:
 
 ## Skills Demonstrated
 
-## SQL
+### SQL
 - Common Table Expressions (CTEs)
 - INNER and LEFT JOINs
 - GROUP BY and aggregate functions
@@ -457,7 +457,7 @@ Checks included:
 - Multi-level exposure aggregation
 - Filtering and ranking analytical results
 
-## Exposure Analysis
+### Exposure Analysis
 - Total Insured Value (TIV) aggregation
 - Policy-level exposure analysis
 - Exposure-to-policy-limit analysis
@@ -466,3 +466,6 @@ Checks included:
 - Severe hazard exposure analysis
 - Exposure data quality validation
 
+## Project Summary
+
+This project demonstrates the use of PostgreSQL to analyse a simulated insurance exposure portfolio. The analysis focuses on identifying concentrations of insured value across policies, states and hazard zones, comparing exposure with policy limits, and evaluating exposure associated with different hazard levels.
