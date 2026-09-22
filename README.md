@@ -520,7 +520,7 @@ WHERE exposure.total_tiv_usd <= 0; -- Finds TIV values less than or equal to zer
 ```
 **Results:** No zero or negative TIV values were found.
 
-### Missing hazard classification 
+### Hazard-zone ID validation 
 A data quality check was performed to identify invalid or unmatched hazard-zone IDs by verifying that each hazard-zone ID in the exposure data had a corresponding record in the hazard table.
 
 ```sql
