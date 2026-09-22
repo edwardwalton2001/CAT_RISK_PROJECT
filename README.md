@@ -469,4 +469,4 @@ Checks included:
 
 ## Project Summary
 
-This project demonstrates the use of PostgreSQL to analyse a simulated insurance exposure portfolio. The analysis focuses on identifying concentrations of insured value across policies, states and hazard zones, comparing exposure with policy limits, and evaluating exposure associated with different hazard levels.
+This project demonstrates the use of PostgreSQL to analyse a simulated insurance exposure portfolio. The dataset is entirely synthetic and is intended for analytical and portfolio purposes rather than to represent a real-world insurance portfolio. The analysis focuses on identifying concentrations of insured value across policies, states, regions and hazard zones, comparing exposure against policy limits, and assessing the distribution of exposure across different hazard levels.
