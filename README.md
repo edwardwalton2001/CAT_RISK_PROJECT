@@ -410,3 +410,4 @@ WHERE ranked_zones.zone_rank = 1 -- Keeps only the hazard zone with the largest 
 
 ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of total state TIV
 ```
+## Key Findings
