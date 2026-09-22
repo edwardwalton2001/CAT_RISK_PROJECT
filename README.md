@@ -1,4 +1,4 @@
-### Catastrophe Exposure Analysis
+# Catastrophe Exposure Analysis
 
 ## Project Overview
 
@@ -38,7 +38,7 @@ The project uses three datasets:
 
 The database consists of three related tables: `exposure`, `policy`, and `hazard`.
 
-# Policy Table
+## Policy Table
 
 | Column | Data Type |
 |---|---|
@@ -52,7 +52,7 @@ The database consists of three related tables: `exposure`, `policy`, and `hazard
 | limit_basis | VARCHAR(50) |
 | policy_status | VARCHAR(50) |
 
-# Hazard Table
+## Hazard Table
 
 | Column | Data Type |
 |---|---|
@@ -66,7 +66,7 @@ The database consists of three related tables: `exposure`, `policy`, and `hazard
 | composite_hazard_score | NUMERIC(10,2) |
 | hazard_band | VARCHAR(50) |
 
-# Exposure Table
+## Exposure Table
 
 | Column | Data Type |
 |---|---|
@@ -97,7 +97,7 @@ exposure.hazard_zone_id - hazard.hazard_zone_id
 Exposure sits as the central table connecting both policy and hazard with common fields.
 
 
-### SQL Analysis
+# SQL Analysis
 
 ## 1. Exposure by Region
 
@@ -436,7 +436,7 @@ ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of 
 
 ## Data Quality 
 
-## Data Quality Checks
+### Data Quality Checks
 
 Before conducting the exposure analysis, data quality checks were performed to identify potential issues that could affect the reliability of the results.
 
