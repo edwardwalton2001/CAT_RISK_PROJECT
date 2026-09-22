@@ -11,11 +11,8 @@ The project focuses on questions such as:
 - Which regions have the greatest concentration of insured exposure?
 - Which regions have the greatest concentration of Severe hazard exposure?
 - Which policies have high exposure relative to their policy limits?
-- Which construction types have the greatest exposure to Severe hazard zones?
 - Which policy and hazard-zone combinations represent the greatest accumulation risk?
 - Which states have the greatest concentration of insured value, and how dependent is each state's exposure on its largest hazard zone?
-- How many insured locations are exposed to higher hazard levels?
-- How much TIV is located in Severe hazard zones?
 
 - ## Tools Used
 
@@ -411,7 +408,7 @@ WHERE ranked_zones.zone_rank = 1 -- Keeps only the hazard zone with the largest 
 ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of total state TIV
 ```
 ## Key Findings
-- **Region Exposure:** The east region has the highest concentration of general exposure, whilst the north has the least. The story remains the same       for severe hazard exposure. However, one anomaly is the west region where it ranks third in terms of severe_tiv but has fewer severe_tiv             locations than both central and north regions.
+- **Region Exposure:** The **East** region has the highest concentration of general exposure **($804.3 million)**, whilst the **North** has the         least **($477.2 million)**. The story remains the same for severe hazard exposure. However, one anomaly is the west region where it ranks third      in terms of severe_tiv but has fewer severe_tiv locations than both **Central** and **North** regions.
 - **Policy Exposure:** POL00097 had the largest total insured value at approximately $30,643,573 distributed across 7 insured locations. Its total
       TIV represented 3 times the policy limit.
 - **Severe Hazard Exposure:** POL00275 had $8,586,508 of TIV located within Severe hazard zones, representing 78% of its total policy exposure.
