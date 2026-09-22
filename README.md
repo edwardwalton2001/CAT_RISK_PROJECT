@@ -507,6 +507,19 @@ WHERE exposure.policy_id IS NULL
    OR exposure.hazard_zone_id IS NULL
    OR TRIM(exposure.hazard_zone_id) = ''; -- `TRIM()` was used to remove leading and trailing spaces before checking for blank values, ensuring that                                               fields containing only spaces were also identified as missing data.
 ```
+**Result:** No cells with NUll or missing data were found.
+### Negative TIV reconciliation
+A data quality check was performed to identify locations with zero or negative values.
+
+```sql
+
+SELECT exposure.total_tiv_usd,
+       exposure.location_id
+FROM Exposure
+WHERE exposure.total_tiv_usd <= 0;
+```
+**Results:** No zero or negative TIV values were found.
+
 ## Skills Demonstrated
 
 ### SQL
