@@ -433,3 +433,36 @@ ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of 
 
 - **Exposure Distribution:** The analysis identified differences in both the absolute amount and relative concentration of Severe hazard exposure          across regions, demonstrating why total TIV and hazard concentration should be considered separately.
 
+
+## Data Quality 
+
+## Data Quality Checks
+
+Before conducting the exposure analysis, data quality checks were performed to identify potential issues that could affect the reliability of the results.
+
+Checks included:
+- Missing policy and hazard-zone identifiers
+- Zero or negative TIV values
+- Missing hazard-zone classifications
+
+## Skills Demonstrated
+
+## SQL
+- Common Table Expressions (CTEs)
+- INNER and LEFT JOINs
+- GROUP BY and aggregate functions
+- Conditional aggregation using CASE
+- Window functions using ROW_NUMBER()
+- NULLIF for safe ratio calculations
+- Multi-level exposure aggregation
+- Filtering and ranking analytical results
+
+## Exposure Analysis
+- Total Insured Value (TIV) aggregation
+- Policy-level exposure analysis
+- Exposure-to-policy-limit analysis
+- Hazard-zone concentration analysis
+- Geographic exposure concentration
+- Severe hazard exposure analysis
+- Exposure data quality validation
+
