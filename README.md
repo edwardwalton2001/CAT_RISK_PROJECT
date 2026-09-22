@@ -516,9 +516,23 @@ A data quality check was performed to identify locations with zero or negative v
 SELECT exposure.total_tiv_usd,
        exposure.location_id
 FROM Exposure
-WHERE exposure.total_tiv_usd <= 0;
+WHERE exposure.total_tiv_usd <= 0; -- Finds TIV values less than or equal to zero.
 ```
 **Results:** No zero or negative TIV values were found.
+
+### Missing hazard classification 
+A data quality check was performed to identify invalid or unmatched hazard-zone IDs by verifying that each hazard-zone ID in the exposure data had a corresponding record in the hazard table.
+
+```sql
+SELECT exposure.location_id,
+       exposure.hazard_zone_id,
+       hazard.hazard_zone_id
+FROM Exposure
+LEFT JOIN hazard ON exposure.hazard_zone_id = hazard.hazard_zone_id
+WHERE exposure.hazard_zone_id IS NOT NULL
+      AND hazard.hazard_zone_id IS NULL
+```
+**Results:** No unmatched or invalid hazard-zone IDs were found
 
 ## Skills Demonstrated
 
