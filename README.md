@@ -111,8 +111,11 @@ SELECT
     exposure.region,
     SUM(exposure.total_tiv_usd) AS total_tiv, -- Calculates TIV across all locations in each region
     COUNT(exposure.location_id) AS location_count -- Counts number of locations within each region
+
 FROM exposure
+
 GROUP BY exposure.region
+
 ORDER BY total_tiv DESC;
 ```
 
@@ -149,7 +152,9 @@ WITH exposure_region AS(
     GROUP BY exposure.region
 )
 SELECT *
+
 FROM exposure_region
+
 ORDER BY exposure_region.total_tiv DESC; -- Ordering by the total_tiv in a descending order.
 ```
 
