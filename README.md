@@ -411,3 +411,6 @@ WHERE ranked_zones.zone_rank = 1 -- Keeps only the hazard zone with the largest 
 ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of total state TIV
 ```
 ## Key Findings
+- The east region has the highest concentration of general exposure, whilst the north has the least. The story remains the same for severe hazard exposure. However, one anomaly is the west region where it ranks third in terms of severe_tiv but has fewer severe_tiv locations than both central and north regions.
+- 
+
