@@ -220,7 +220,9 @@ WITH policy_exposure AS (
         SUM(total_tiv_usd) AS total_policy_tiv,
         COUNT(location_id) AS location_count,
         AVG(total_tiv_usd) AS avg_location_tiv
+
     FROM exposure
+
     GROUP BY policy_id
 )
 
@@ -231,7 +233,9 @@ SELECT
     policy_exposure.total_policy_tiv,
     policy_exposure.location_count,
     policy_exposure.avg_location_tiv
+
 FROM policy_exposure
+
 INNER JOIN policy -- Using inner join as only require valid policies with corresponding policy information for this analysis.
     ON policy_exposure.policy_id = policy.policy_id
 
@@ -263,7 +267,8 @@ WITH policy_exposure AS ( -- Aggregates location level exposure at policy level.
         SUM(total_tiv_usd) AS total_policy_tiv, -- Calculates the total TIV across all locations belonging to each policy.
         
         COUNT(location_id) AS location_count -- Counts how many locations belong to that policy.
-    FROM exposure
+
+FROM exposure
 
     JOIN policy ON 
         exposure.policy_id = policy.policy_id
@@ -305,7 +310,7 @@ SELECT -- Combines policy-level exposure with hazard-zone exposure to measure co
     
 (
     policy_hazard_exposure.zone_tiv/
-        NULLIF(policy_exposure.total_policy_tiv,0)  -- Dividing zone tiv by total policy tiv to calculate the percentage of the policy's total TIV that is concentrated within that specific hazard zone.
+        NULLIF(policy_exposure.total_policy_tiv,0)  -- Dividing zone tiv by total policy tiv to calculate the percentage of the policy's total TIV                                                          that is concentrated within that specific hazard zone.
 )*100.00 AS hazard_zone_share_of_policy_tiv,
 
 policy_hazard_exposure.zone_tiv/
