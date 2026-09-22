@@ -502,15 +502,6 @@ SELECT
     exposure.policy_id,
     exposure.hazard_zone_id
 FROM exposure
-WHERE exposure.location_id IS NULL -- Searches for where cell displays 'NULL'
-      OR exposure.policy_id IS NULL
-      OR exposure.hazard_zone_id IS NULL;
-
-SELECT
-    exposure.location_id,
-    exposure.policy_id,
-    exposure.hazard_zone_id
-FROM exposure
 WHERE exposure.policy_id IS NULL
    OR TRIM(exposure.policy_id) = ''
    OR exposure.hazard_zone_id IS NULL
