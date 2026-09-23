@@ -504,7 +504,7 @@ FROM exposure
 WHERE exposure.policy_id IS NULL
    OR TRIM(exposure.policy_id) = ''
    OR exposure.hazard_zone_id IS NULL
-   OR TRIM(exposure.hazard_zone_id) = ''; -- `TRIM()` was used to remove leading and trailing spaces before checking for blank values, ensuring that                                               fields containing only spaces were also identified as missing data.
+   OR TRIM(exposure.hazard_zone_id) = ''; -- `TRIM()` was used to remove leading and trailing spaces before checking for blank values, ensuring that    fields containing only spaces were also identified as missing data.
 ```
 **Result:** No missing policy or hazard-zone identifiers were identified.
 ### Negative TIV reconciliation
