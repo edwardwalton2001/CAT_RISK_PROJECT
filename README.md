@@ -470,7 +470,6 @@ Before conducting the exposure analysis, data quality checks were performed to i
 Checks included:
 - Missing policy and hazard-zone identifiers
 - Zero or negative TIV values
-- Missing hazard-zone classifications
 
 ### TIV Reconciliation
 
