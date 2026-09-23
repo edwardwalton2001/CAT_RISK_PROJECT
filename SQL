@@ -1,0 +1,59 @@
+
+-- 1. POLICY TABLE
+
+CREATE TABLE policy1 (
+    policy_id VARCHAR(20) PRIMARY KEY,
+    underwriter_id VARCHAR(20),
+    policy_type VARCHAR(100),
+    policy_limit_usd BIGINT,
+    deductible_usd BIGINT,
+    attachment_point_usd BIGINT,
+    participation_share NUMERIC(5,2),
+    limit_basis VARCHAR(50),
+    policy_status VARCHAR(50)
+);
+
+-- 2. HAZARD TABLE
+
+CREATE TABLE hazard1 (
+    hazard_zone_id VARCHAR(20) PRIMARY KEY,
+    region VARCHAR(50),
+    wind_speed_1in100_mph INT,
+    flood_depth_1in100_m NUMERIC(10,2),
+    pga_1in475_g NUMERIC(10,3),
+    wildfire_score_0_100 INT,
+    hail_score_0_100 INT,
+    composite_hazard_score NUMERIC(10,2),
+    hazard_band VARCHAR(50)
+);
+
+
+
+-- 3. EXPOSURE TABLE
+
+CREATE TABLE exposure1 (
+    location_id VARCHAR(20) PRIMARY KEY,
+    account_id VARCHAR(20),
+    policy_id VARCHAR(20),
+    region VARCHAR(50),
+    state VARCHAR(10),
+    postal_code INT,
+    latitude NUMERIC(10,5),
+    longitude NUMERIC(10,5),
+    hazard_zone_id VARCHAR(20),
+    occupancy VARCHAR(100),
+    construction_code VARCHAR(50),
+    year_built INT,
+    number_of_stories INT,
+    building_tiv_usd BIGINT,
+    contents_tiv_usd BIGINT,
+    business_interruption_tiv_usd BIGINT,
+    total_tiv_usd BIGINT,
+
+    FOREIGN KEY (policy_id)
+        REFERENCES policy(policy_id),
+
+    FOREIGN KEY (hazard_zone_id)
+        REFERENCES hazard(hazard_zone_id)
+);
+
