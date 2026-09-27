@@ -1,4 +1,4 @@
-# Catastrophe Exposure Analysis
+# Catastrophe Risk Exposure Analysis
 
 ## Project Overview
 
