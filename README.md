@@ -436,7 +436,7 @@ The cleaned exposure, policy and hazard datasets were imported into Power BI to 
 
 ### Exposure Overview
 
-![Catastrophe Exposure Overview](powerbi/exposure_overview.png)
+![Catastrophe Exposure Overview](powerbi/exposure.png)
 
 
 
