@@ -434,9 +434,19 @@ ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of 
 ## Power BI Dashboard
 The cleaned exposure, policy and hazard datasets were imported into Power BI to create a three-page interactive dashboard covering portfolio exposure, policy-level analysis and hazard concentration.
 
+An interactive Power BI dashboard was developed to analyse portfolio
+exposure, policy-level metrics and catastrophe hazard concentrations.
+
+
 ### Exposure Overview
 
 ![Exposure Overview](PowerBI/Exposure_Overview.png)
+
+### Policy Analysis
+![Policy Analysis](PowerBI/Policy_Analysis.png)
+
+### Hazard Analysis
+![Hazard Analysis](PowerBI/Hazard_Analysis.png)
 
 
 
