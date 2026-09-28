@@ -437,6 +437,8 @@ The cleaned exposure, policy and hazard datasets were imported into Power BI to 
 An interactive Power BI dashboard was developed to analyse portfolio
 exposure, policy-level metrics and catastrophe hazard concentrations.
 
+Note: The Power BI .pbix file is not included in this repository due to its file size.
+
 
 ### Exposure Overview
 
