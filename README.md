@@ -21,6 +21,7 @@ The project focuses on questions such as:
 - VS Code
 - Excel
 - GitHub
+- Power BI
 
 ## Dataset
 
@@ -430,6 +431,16 @@ WHERE ranked_zones.zone_rank = 1 -- Keeps only the hazard zone with the largest 
 
 ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of total state TIV
 ```
+## Power BI Dashboard
+The cleaned exposure, policy and hazard datasets were imported into Power BI to create a three-page interactive dashboard covering portfolio exposure, policy-level analysis and hazard concentration.
+
+### Exposure Overview
+
+![Catastrophe Exposure Overview](powerbi/exposure_overview.png)
+
+
+
+
 ## Key Findings
 - **Regional Exposure:** The **East** region has the largest overall exposure **($804.3 million)**, whilst the **North** has the         least **($477.2 million)**.
 - **Policy Exposure:** **POL00097** had the largest total insured value at approximately **$30.6 million** distributed across 7 insured locations.      Its total TIV represented 3 times the policy limit.
