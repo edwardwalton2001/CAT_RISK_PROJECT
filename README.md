@@ -452,6 +452,8 @@ Note: The Power BI .pbix file is not included in this repository due to its file
 
 
 
+
+
 ## Key Findings
 - **Regional Exposure:** The **East** region has the largest overall exposure **($804.3 million)**, whilst the **North** has the         least **($477.2 million)**.
 - **Policy Exposure:** **POL00097** had the largest total insured value at approximately **$30.6 million** distributed across 7 insured locations.      Its total TIV represented 3 times the policy limit.
@@ -575,6 +577,16 @@ WHERE exposure.hazard_zone_id IS NOT NULL
 - Geographic exposure concentration
 - Severe hazard exposure analysis
 - Exposure data quality validation
+
+### Power BI
+- **Data Modelling** – Built relationships between the Exposure, Policy and Hazard tables.
+- **DAX Measures** – Created measures for Total TIV, Total Locations, Severe TIV %, policy exposure and exposure-to-limit ratios.
+- **Filter Context** – Used `CALCULATE` and `REMOVEFILTERS` to control calculations across report filters.
+- **Interactive Reporting** – Implemented slicers, visual interactions and drill-down hierarchies for portfolio exploration.
+- **Exposure Analysis** – Developed Top-N, hazard-zone concentration and policy-level exposure analysis.
+- **Data Visualisation** – Used cards, bar/column charts, scatter plots, donut charts, tables and treemaps to communicate portfolio risk.
+- **Dashboard Design** – Structured the report across Exposure Overview, Policy Analysis and Hazard Analysis pages.
+- **Validation** – Cross-checked Power BI results against PostgreSQL analysis for consistency.
 
 ## Project Summary
 
