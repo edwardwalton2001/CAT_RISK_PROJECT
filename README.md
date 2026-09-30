@@ -579,7 +579,7 @@ WHERE exposure.hazard_zone_id IS NOT NULL
 - Exposure data quality validation
 
 ### Power BI
-- **Data Modelling** – Built relationships between the Exposure, Policy and Hazard tables.
+- **Data Modelling** – Integrated policy, hazard and location-level exposure datasets into a relational model for portfolio analysis.
 - **DAX Measures** – Created measures for Total TIV, Total Locations, Severe TIV %, policy exposure and exposure-to-limit ratios.
 - **Filter Context** – Used `CALCULATE` and `REMOVEFILTERS` to control calculations across report filters.
 - **Interactive Reporting** – Implemented slicers, visual interactions and drill-down hierarchies for portfolio exploration.
