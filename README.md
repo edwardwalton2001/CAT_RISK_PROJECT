@@ -20,7 +20,6 @@ The project focuses on questions such as:
 - pgAdmin
 - VS Code
 - Excel
-- GitHub
 - Power BI
 
 ## Dataset
