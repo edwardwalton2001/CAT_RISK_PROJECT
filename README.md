@@ -487,26 +487,42 @@ occupancy_construction_exposure AS (
              construction_period.year_built_band
 
 
+),
+
+severe_exposure_share AS (
+    SELECT
+        occupancy_construction_exposure.*,
+
+        (
+            occupancy_construction_exposure.severe_tiv /
+            NULLIF(occupancy_construction_exposure.total_tiv, 0)
+        ) * 100.00 AS severe_tiv_share
+
+    FROM occupancy_construction_exposure
 )
 
 SELECT 
-    occupancy_construction_exposure.occupancy,
-    occupancy_construction_exposure.construction_code,
-    occupancy_construction_exposure.year_built_band,
-    occupancy_construction_exposure.total_tiv,
-    occupancy_construction_exposure.severe_tiv,
-    occupancy_construction_exposure.severe_location_count,
-    occupancy_construction_exposure.policy_count,
+    severe_exposure_share.occupancy,
+    severe_exposure_share.construction_code,
+    severe_exposure_share.year_built_band,
+    severe_exposure_share.total_tiv,
+    severe_exposure_share.severe_tiv,
+    severe_exposure_share.severe_tiv_share,
+    severe_exposure_share.severe_location_count,
+    severe_exposure_share.policy_count,
     
-(
-    occupancy_construction_exposure.severe_tiv/
-        NULLIF(occupancy_construction_exposure.total_tiv,0)
-*100.00) AS severe_tiv_share
+        ROW_NUMBER() OVER(
+            ORDER BY severe_exposure_share.severe_tiv_share
+        ) AS severe_tiv_share_rank,
 
-FROM occupancy_construction_exposure
+        ROW_NUMBER() OVER(
+            ORDER BY severe_exposure_share.severe_tiv
+        ) AS severe_tiv_rank
+    
 
-ORDER BY severe_tiv DESC;
+FROM severe_exposure_share
 
+ORDER BY severe_tiv_rank DESC;
 ```
 
 
