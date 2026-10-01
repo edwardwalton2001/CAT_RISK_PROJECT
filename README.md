@@ -12,6 +12,7 @@ The project focuses on questions such as:
 - Which policies have high exposure relative to their policy limits?
 - Which policy and hazard-zone combinations represent the greatest accumulation risk?
 - Which states have the greatest concentration of insured value, and how dependent is each state's exposure on its largest hazard zone?
+- Which occupancy, construction type and building-age groups have the greatest insured value exposed to severe hazard zones and what proportion of     their total exposure is located within severe zones?
 
 ## Tools Used
 
@@ -430,6 +431,85 @@ WHERE ranked_zones.zone_rank = 1 -- Keeps only the hazard zone with the largest 
 
 ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of total state TIV
 ```
+
+## 7. Hazard Zone Exposure by Occupancy, Construction Type and Year Built
+
+Which occupancy, construction type and building-age groups have the greatest insured value exposed to severe hazard zones and what proportion of     their total exposure is located within severe zones?
+
+This analysis examines how insured exposure within severe hazard zones varies by occupancy, construction type and building age. Location-level exposure is grouped into building-age bands and combined with hazard classifications to calculate total TIV, severe-zone TIV, the number of severe-zone locations and the proportion of each group's total TIV located within severe hazard zones.
+
+```sql
+WITH construction_period AS (
+    SELECT
+        exposure.*,
+        CASE
+            WHEN exposure.year_built < 1960 THEN 'Pre-1960'
+            WHEN exposure.year_built BETWEEN 1960 AND 1979 THEN '1960-1979'
+            WHEN exposure.year_built BETWEEN 1980 AND 1999 THEN '1980-1999'
+            WHEN exposure.year_built BETWEEN 2000 AND 2019 THEN '2000-2019'
+            WHEN exposure.year_built > 2019 THEN 'Post-2019'
+        END AS year_built_band
+    FROM exposure
+),
+
+occupancy_construction_exposure AS (
+    SELECT
+        construction_period.occupancy,
+        construction_period.construction_code,
+        construction_period.year_built_band,
+        SUM(construction_period.total_tiv_usd) AS total_tiv,
+        COUNT(DISTINCT construction_period.policy_id) AS policy_count,
+        
+        SUM(
+            CASE
+                WHEN hazard.hazard_band = 'Severe'
+                THEN construction_period.total_tiv_usd
+                ELSE 0
+            END
+        
+         ) AS severe_tiv,
+         
+         SUM(
+            CASE
+                WHEN hazard.hazard_band = 'Severe'
+                THEN 1
+                ELSE 0
+            END
+        ) AS severe_location_count
+
+    FROM construction_period
+    
+    LEFT JOIN hazard ON construction_period.hazard_zone_id = hazard.hazard_zone_id
+    
+
+    GROUP BY construction_period.occupancy,
+             construction_period.construction_code,
+             construction_period.year_built_band
+
+
+)
+
+SELECT 
+    occupancy_construction_exposure.occupancy,
+    occupancy_construction_exposure.construction_code,
+    occupancy_construction_exposure.year_built_band,
+    occupancy_construction_exposure.total_tiv,
+    occupancy_construction_exposure.severe_tiv,
+    occupancy_construction_exposure.severe_location_count,
+    occupancy_construction_exposure.policy_count,
+    
+(
+    occupancy_construction_exposure.severe_tiv/
+        NULLIF(occupancy_construction_exposure.total_tiv,0)
+*100.00) AS severe_tiv_share
+
+FROM occupancy_construction_exposure
+
+ORDER BY severe_tiv DESC;
+
+```
+
+
 ## Power BI Dashboard
 The cleaned exposure, policy and hazard datasets were imported into Power BI to create a three-page interactive dashboard covering portfolio exposure, policy-level analysis and hazard concentration.
 
