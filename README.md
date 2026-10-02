@@ -567,7 +567,7 @@ Note: The Power BI .pbix file is not included in this repository due to its file
 
   * **Largest Policy Exposure:** POL00097 had the highest total policy TIV at approximately **$30.6 million** across seven insured locations. Its total TIV was approximately **3.1x** its **$10 million policy limit**, with around **$4.0 million** located in severe hazard zones.
   * **Highest Exposure-to-Limit Ratio:** POL00308 had the highest exposure-to-limit ratio at approximately **19.1x**, with **$19.1 million** in total TIV compared with a **$1 million policy limit**. Approximately **$10.0 million** of this exposure was located in severe hazard zones.
-  * **Largest Severe Hazard Exposure:** POL00275 had the highest Severe-zone TIV at approximately **$20.2 million** out of **$26.0 million** in total policy TIV. This means approximately **77.7%** of the policy's insured value was associated with severe hazard zones, while its total TIV was approximately **10.4x** its **$2.5 million policy limit**.
+  * **Largest Severe Hazard Exposure:** POL00275 had the highest severe-zone TIV at approximately **$20.2 million** out of **$26.0 million** in total policy TIV. This means approximately **77.7%** of the policy's insured value was associated with severe hazard zones, while its total TIV was approximately **10.4x** its **$2.5 million policy limit**.
 
 * **State-Hazard Zone Concentration:**
 
