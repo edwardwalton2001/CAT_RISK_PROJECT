@@ -615,7 +615,7 @@ WHERE exposure.total_tiv_usd <>
 
 **Result:** No discrepancies were identified, indicating that the reported total TIV matched with its component values across all locations.
 
-### Policy, location and hazard-zone reconciliation
+### Policy, Location and Hazard-zone Reconciliation
 
 A data quality check was performed to identify missing policy and hazard-zone identifiers. Both `NULL` values and blank strings were checked to ensure that missing values stored in different formats were identified.
 
@@ -631,7 +631,7 @@ WHERE exposure.policy_id IS NULL
    OR TRIM(exposure.hazard_zone_id) = ''; -- `TRIM() was used to remove leading and trailing spaces before checking for blank values, ensuring that    fields containing only spaces were also identified as missing data.
 ```
 **Result:** No missing policy or hazard-zone identifiers were identified.
-### Negative TIV reconciliation
+### Negative TIV Reconciliation
 A data quality check was performed to identify locations with zero or negative values.
 
 ```sql
@@ -643,7 +643,7 @@ WHERE exposure.total_tiv_usd <= 0; -- Finds TIV values less than or equal to zer
 ```
 **Results:** No zero or negative TIV values were found.
 
-### Hazard-zone ID validation 
+### Hazard-zone ID Validation 
 A data quality check was performed to identify invalid or unmatched hazard-zone IDs by verifying that each hazard-zone ID in the exposure data had a corresponding record in the hazard table.
 
 ```sql
