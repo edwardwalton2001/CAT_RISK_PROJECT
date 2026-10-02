@@ -303,3 +303,129 @@ FROM ranked_zones
 WHERE ranked_zones.zone_rank = 1 -- Keeps only the hazard zone with the largest TIV within each state.
 
 ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of total state TIV
+
+-- Which occupancy, construction type and building-age groups have the greatest insured value exposed to severe hazard zones.
+-- What proportion of their total exposure is located within severe zones?
+
+WITH construction_period AS (
+    SELECT
+        exposure.*,
+        CASE
+            WHEN exposure.year_built < 1960 THEN 'Pre-1960'
+            WHEN exposure.year_built BETWEEN 1960 AND 1979 THEN '1960-1979'
+            WHEN exposure.year_built BETWEEN 1980 AND 1999 THEN '1980-1999'
+            WHEN exposure.year_built BETWEEN 2000 AND 2019 THEN '2000-2019'
+            WHEN exposure.year_built > 2019 THEN 'Post-2019'
+        END AS year_built_band
+    FROM exposure
+),
+
+occupancy_construction_exposure AS (
+    SELECT
+        construction_period.occupancy,
+        construction_period.construction_code,
+        construction_period.year_built_band,
+        SUM(construction_period.total_tiv_usd) AS total_tiv,
+        COUNT(DISTINCT construction_period.policy_id) AS policy_count,
+        
+        SUM(
+            CASE
+                WHEN hazard.hazard_band = 'Severe'
+                THEN construction_period.total_tiv_usd
+                ELSE 0
+            END
+        
+         ) AS severe_tiv,
+         
+         SUM(
+            CASE
+                WHEN hazard.hazard_band = 'Severe'
+                THEN 1
+                ELSE 0
+            END
+        ) AS severe_location_count
+
+    FROM construction_period
+    
+    LEFT JOIN hazard ON construction_period.hazard_zone_id = hazard.hazard_zone_id
+    
+
+    GROUP BY construction_period.occupancy,
+             construction_period.construction_code,
+             construction_period.year_built_band
+
+),
+
+severe_exposure_share AS (
+    SELECT
+        occupancy_construction_exposure.*,
+
+        (
+            occupancy_construction_exposure.severe_tiv /
+            NULLIF(occupancy_construction_exposure.total_tiv, 0)
+        ) * 100.00 AS severe_tiv_share
+
+    FROM occupancy_construction_exposure
+),
+
+occupancy_exposure AS(
+    SELECT 
+       
+        severe_exposure_share.occupancy,
+        SUM(severe_exposure_share.total_tiv) AS occupancy_tiv,
+        SUM(severe_exposure_share.severe_tiv) AS occupancy_severe_tiv
+   
+    FROM severe_exposure_share
+
+    GROUP BY severe_exposure_share.occupancy
+),
+
+construction_exposure AS(
+    SELECT
+       
+        severe_exposure_share.construction_code,
+        SUM(severe_exposure_share.total_tiv) AS construction_type_tiv,
+        SUM(severe_exposure_share.severe_tiv) AS construction_type_severe_tiv
+    
+    FROM severe_exposure_share
+
+    GROUP BY severe_exposure_share.construction_code
+
+),
+
+building_age_exposure AS(
+    SELECT
+       
+        severe_exposure_share.year_built_band,
+        SUM(severe_exposure_share.total_tiv) AS year_built_tiv,
+        SUM(severe_exposure_share.severe_tiv) AS year_built_severe_tiv
+    
+    FROM severe_exposure_share
+
+    GROUP BY severe_exposure_share.year_built_band
+)
+
+
+SELECT 
+    severe_exposure_share.occupancy,
+    severe_exposure_share.construction_code,
+    severe_exposure_share.year_built_band,
+    severe_exposure_share.total_tiv,
+    severe_exposure_share.severe_tiv,
+    severe_exposure_share.severe_tiv_share,
+    severe_exposure_share.severe_location_count,
+    severe_exposure_share.policy_count,
+    
+        ROW_NUMBER() OVER(
+            ORDER BY severe_exposure_share.severe_tiv_share
+        ) AS severe_tiv_share_rank,
+
+        ROW_NUMBER() OVER(
+            ORDER BY severe_exposure_share.severe_tiv
+        ) AS severe_tiv_rank
+    
+FROM severe_exposure_share
+
+ORDER BY severe_tiv_rank DESC;
+
+
