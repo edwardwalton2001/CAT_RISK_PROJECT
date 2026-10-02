@@ -304,7 +304,7 @@ WHERE ranked_zones.zone_rank = 1 -- Keeps only the hazard zone with the largest 
 
 ORDER BY ranked_zones.zone_share_tiv DESC; -- Ranks states by the percentage of total state TIV
 
--- Which occupancy, construction type and building-age groups have the greatest insured value exposed to severe hazard zones.
+-- Which occupancy, construction type and building-age groups have the greatest insured value exposed to severe hazard zones?
 -- What proportion of their total exposure is located within severe zones?
 
 WITH construction_period AS (
