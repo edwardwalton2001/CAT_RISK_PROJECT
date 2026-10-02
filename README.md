@@ -119,7 +119,7 @@ ORDER BY total_tiv DESC;
 ```
 
 ## 2. Severe Hazard Exposure by Region
-Which regions have the greatest proportion of insured value located within Severe hazard zones?
+Which regions have the greatest proportion of insured value located within severe hazard zones?
 
 This analysis aggregates location-level exposure by region with greatest concentration of severe hazard exposure.
 
@@ -136,7 +136,7 @@ WITH exposure_region AS ( -- Aggregates location-level exposure to one row per r
                 THEN exposure.total_tiv_usd
                 ELSE 0 
             END
-        ) AS severe_tiv, -- Calculates the amount of regional TIV located within Severe hazard zones
+        ) AS severe_tiv, -- Calculates the amount of regional TIV located within severe hazard zones
 
         SUM(
             CASE
@@ -144,7 +144,7 @@ WITH exposure_region AS ( -- Aggregates location-level exposure to one row per r
                 THEN 1
                 ELSE 0
             END
-        ) AS severe_location_count -- Counts the number of locations within Severe hazard zones for each region
+        ) AS severe_location_count -- Counts the number of locations within severe hazard zones for each region
 
     FROM exposure
     
@@ -163,19 +163,19 @@ SELECT
     (
         exposure_region.severe_tiv /
         NULLIF(exposure_region.total_tiv, 0)
-    ) * 100.00 AS severe_tiv_percentage -- Calculates the percentage of each region's total TIV located within Severe hazard zones
+    ) * 100.00 AS severe_tiv_percentage -- Calculates the percentage of each region's total TIV located within severe hazard zones
 
 FROM exposure_region
 
 ORDER BY severe_tiv_percentage DESC;
--- Ranks regions from highest to lowest Severe hazard exposure concentration
+-- Ranks regions from highest to lowest severe hazard exposure concentration
 ```
 
 ## 3. Exposure vs Policy Limit 
 
-Which policies have the greatest insured exposure relative to their policy limits, and how much of that exposure is located in Severe hazard zones?
+Which policies have the greatest insured exposure relative to their policy limits, and how much of that exposure is located in severe hazard zones?
 
-This analysis aggregates location-level exposure data to the policy level. It calculates total insured value (TIV), the number of insured locations, TIV located in Severe hazard zones, and the ratio between total TIV and the policy limit.
+This analysis aggregates location-level exposure data to the policy level. It calculates total insured value (TIV), the number of insured locations, TIV located in severe hazard zones, and the ratio between total TIV and the policy limit.
 
 ```sql
 WITH policy_exposure AS (
@@ -188,7 +188,7 @@ WITH policy_exposure AS (
 
         SUM(
             CASE
-                WHEN hazard.hazard_band = 'Severe' -- Includes TIV only from Severe hazard locations
+                WHEN hazard.hazard_band = 'Severe' -- Includes TIV only from severe hazard locations
                 THEN exposure.total_tiv_usd
                 ELSE 0
             END
