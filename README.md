@@ -483,12 +483,9 @@ occupancy_construction_exposure AS ( -- Aggregates exposure by occupancy, constr
     
     LEFT JOIN hazard ON construction_period.hazard_zone_id = hazard.hazard_zone_id
     
-
     GROUP BY construction_period.occupancy,
              construction_period.construction_code,
              construction_period.year_built_band
-
-
 ),
 
 severe_exposure_share AS (
