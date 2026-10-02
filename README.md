@@ -439,7 +439,7 @@ Which occupancy, construction type and building-age groups have the greatest ins
 This analysis examines how insured exposure within severe hazard zones varies by occupancy, construction type and building age. Location-level exposure is grouped into building-age bands and combined with hazard classifications to calculate total TIV, severe-zone TIV, the number of severe-zone locations and the proportion of each group's total TIV located within severe hazard zones.
 
 ```sql
-WITH construction_period AS (
+WITH construction_period AS ( 
     SELECT
         exposure.*,
         CASE
@@ -448,26 +448,28 @@ WITH construction_period AS (
             WHEN exposure.year_built BETWEEN 1980 AND 1999 THEN '1980-1999'
             WHEN exposure.year_built BETWEEN 2000 AND 2019 THEN '2000-2019'
             WHEN exposure.year_built > 2019 THEN 'Post-2019'
-        END AS year_built_band
+        END AS year_built_band -- Creates year of construction band
     FROM exposure
 ),
 
-occupancy_construction_exposure AS (
+occupancy_construction_exposure AS ( -- Aggregates exposure by occupancy, construction type and the year of construction. Assesses each variable                                             relative to severe hazard exposure
     SELECT
         construction_period.occupancy,
         construction_period.construction_code,
         construction_period.year_built_band,
-        SUM(construction_period.total_tiv_usd) AS total_tiv,
-        COUNT(DISTINCT construction_period.policy_id) AS policy_count,
+
+        SUM(construction_period.total_tiv_usd) AS total_tiv, -- Calculates total TIV for each property group.  
+
+        COUNT(DISTINCT construction_period.policy_id) AS policy_count, -- Counts number of policies contributing to each group.
         
         SUM(
             CASE
                 WHEN hazard.hazard_band = 'Severe'
-                THEN construction_period.total_tiv_usd
+                THEN construction_period.total_tiv_usd 
                 ELSE 0
             END
         
-         ) AS severe_tiv,
+         ) AS severe_tiv, -- Calculates TIV in severe hazard zones.
          
          SUM(
             CASE
@@ -475,7 +477,7 @@ occupancy_construction_exposure AS (
                 THEN 1
                 ELSE 0
             END
-        ) AS severe_location_count
+        ) AS severe_location_count -- Calculates number of locations in severe hazard zones.
 
     FROM construction_period
     
@@ -495,7 +497,7 @@ severe_exposure_share AS (
 
         (
             occupancy_construction_exposure.severe_tiv /
-            NULLIF(occupancy_construction_exposure.total_tiv, 0)
+            NULLIF(occupancy_construction_exposure.total_tiv, 0)  -- Calculates the share of severe TIV relative to the total TIV.
         ) * 100.00 AS severe_tiv_share
 
     FROM occupancy_construction_exposure
@@ -512,12 +514,12 @@ SELECT
     severe_exposure_share.policy_count,
     
         ROW_NUMBER() OVER(
-            ORDER BY severe_exposure_share.severe_tiv_share
-        ) AS severe_tiv_share_rank,
+            ORDER BY severe_exposure_share.severe_tiv_share -- Ranks the groups on the concentration of severe TIV.
+        ) AS severe_tiv_share_rank, -- Deliberately have not used DESC as the largest severe TIV concentrations will appear at the top of the list.
 
         ROW_NUMBER() OVER(
-            ORDER BY severe_exposure_share.severe_tiv
-        ) AS severe_tiv_rank
+            ORDER BY severe_exposure_share.severe_tiv -- Ranks the groups by absolute severe TIV.
+        ) AS severe_tiv_rank -- Deliberately have not used DESC as the largest severe TIV's will appear at the top of the list.
     
 
 FROM severe_exposure_share
