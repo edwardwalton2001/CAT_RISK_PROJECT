@@ -555,7 +555,7 @@ Note: The Power BI .pbix file is not included in this repository due to its file
 * **Severe Hazard Exposure by Region:**
 
   * **Highest Severe Exposure Concentration:** **East** had the highest relative concentration of severe hazard exposure, with approximately **40% of its total TIV** located within severe hazard zones. This represented approximately **$327 million in severe TIV** across **108 insured locations**.
-  * **Largest Absolute Severe Exposure:** The East also had the largest absolute amount of TIV located within severe hazard zones, demonstrating that it had both the highest absolute Severe exposure and the highest relative Severe exposure concentration among the regions analysed.
+  * **Largest Absolute Severe Exposure:** The East also had the largest absolute amount of TIV located within severe hazard zones, demonstrating that it had both the highest absolute severe exposure and the highest relative Severe exposure concentration among the regions analysed.
 
 * **Policy Hazard-Zone Concentration:**
 
@@ -576,8 +576,13 @@ Note: The Power BI .pbix file is not included in this repository due to its file
   * **Other Notable Concentrations:** Pennsylvania and Massachusetts had the next-highest single-zone concentrations, with their largest hazard zones accounting for approximately **13.7%** and **13.2%** of total state TIV, respectively.
   * **Lowest Hazard-Zone Concentration:** Louisiana had the lowest concentration within its largest hazard zone at approximately **9.6%**, indicating that its exposure was more dispersed across hazard zones than the other states analysed.
 
+* **Property Characteristics concentration**
 
-- **Exposure Distribution:** The analysis identified differences in both the absolute amount and relative concentration of severe hazard exposure          across regions, demonstrating why total TIV and hazard concentration should be considered separately.
+   * **Synopsis:** Severe hazard exposure varies quite considerably across property characteristics. Hospitality properties with concrete construction built between 1960–1979 recorded the largest severe-zone exposure at approximately **$36.2m**, representing **47.6%** of the group's total TIV. However, this is spread over 11 severe locations and shared among 23 individual policies. 
+   *  **
+ 
+ 
+ **Exposure Distribution:** The analysis identified differences in both the absolute amount and relative concentration of severe hazard exposure          across regions, demonstrating why total TIV and hazard concentration should be considered separately.
 
 
 ## Data Quality 
