@@ -580,7 +580,8 @@ Note: The Power BI .pbix file is not included in this repository due to its file
 
    * **Synopsis:** Severe hazard exposure varies quite considerably across property characteristics. Hospitality properties with concrete construction built between 1960–1979 recorded the largest severe-zone exposure at approximately **$36.2m**, representing **47.6%** of the group's total TIV. However, this is spread over 11 severe locations and shared among 23 individual policies. 
    *  **Exposure by Building Age:** Properties constructed between 1960 and 1979 had the highest severe TIV at approximately **$29.1m** which represented **35%** of the **$82m** total TIV.
-   *  **Exposure by Occupancy:** 
+   *  **Exposure by Occupancy:** Hospitality recorded both the highest absolute TIV and severe TIV at **$81.7m** and **$26.3m** respectively. Severe TIV contributed 32% towards the total TIV for hospitality. Conversely, industrial properties recorded both the lowest absolute TIV **($68.6m)** and severe TIV **($20.6m)**. Overall, severe TIV concentration was relatively consistent across occupancy types, ranging from approximately **30%** to **32%**.
+   *  **Exposure by Construction Type:** Concrete recorded the greatest concentration of severe TIV at around **35%** with a severe TIV of **$80.6m**. However, masonry recorded a greater absolute TIV of **$81.2m** compared with **$80.6m** for concrete. On the other hand, masonry has a significantly lower exposure in severe hazard zones, with **29%** of it's total TIV located within severe hazard zones.
  
  
  **Exposure Distribution:** The analysis identified differences in both the absolute amount and relative concentration of severe hazard exposure          across regions, demonstrating why total TIV and hazard concentration should be considered separately.
