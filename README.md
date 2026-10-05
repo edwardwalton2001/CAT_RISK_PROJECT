@@ -579,7 +579,8 @@ Note: The Power BI .pbix file is not included in this repository due to its file
 * **Property Characteristics concentration**
 
    * **Synopsis:** Severe hazard exposure varies quite considerably across property characteristics. Hospitality properties with concrete construction built between 1960–1979 recorded the largest severe-zone exposure at approximately **$36.2m**, representing **47.6%** of the group's total TIV. However, this is spread over 11 severe locations and shared among 23 individual policies. 
-   *  **
+   *  **Exposure by Building Age:** Properties constructed between 1960 and 1979 had the highest severe TIV at approximately **$29.1m** which represented **35%** of the **$82m** total TIV.
+   *  **Exposure by Occupancy:** 
  
  
  **Exposure Distribution:** The analysis identified differences in both the absolute amount and relative concentration of severe hazard exposure          across regions, demonstrating why total TIV and hazard concentration should be considered separately.
