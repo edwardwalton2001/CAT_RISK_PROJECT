@@ -671,9 +671,7 @@ WHERE exposure.hazard_zone_id IS NOT NULL
 ### Data Quality Pipeline
 The dataset can be reviewed with individual/manual data checks. However, this pipeline was designed to be reusable for future datasets with the same structure.This reduces the need to manually repeat data validation checks on new exposure data.
 The individual validation functions are stored within a dictionary and are automatically processed. Each check runs as part of a single workflow.
-Two outputs are generated:
-    - **qa_summary.csv** provides a summary of the number of records failing each validation check.
-    - **flagged_exposure_records.csv** contains the underlying exposure records requiring further investigation.
+Two outputs are generated. **qa_summary.csv** provides a summary of the number of records failing each validation check. **flagged_exposure_records.csv** contains the underlying exposure records requiring further investigation.
 
 ```python
 import pandas as pd
