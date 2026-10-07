@@ -592,6 +592,7 @@ Note: The Power BI .pbix file is not included in this repository due to its file
 ### Data Quality Checks
 
 Before conducting the exposure analysis, data quality checks were performed to identify potential issues that could affect the reliability of the results.
+Basic checks were performed as part of the SQL analysis before creating an automated Python data quality pipeline using Pandas.
 
 Checks included:
 - Duplicate Location IDs
@@ -602,8 +603,6 @@ Checks included:
 - Missing construction, occupancy and year-built information
 - Policy IDs not present in the Policy dataset
 - Hazard Zone IDs not present in the Hazard datase
-
-Basic checks were performed as part of the SQL analysis before creating an automated Python data quality pipeline using Pandas.
 
 ### TIV Reconciliation
 
@@ -685,6 +684,9 @@ hazard = pd.read_csv("CSV_Files/Hazard.csv")
 
 
 # 2. Define data quality checks
+# Creates function for each variable.
+
+# Identifies duplicate location IDs
 
 def check_duplicate_locations(exposure):
     duplicate_locations = exposure[
@@ -693,6 +695,7 @@ def check_duplicate_locations(exposure):
 
     return duplicate_locations
 
+# Checks for missing policy IDs
 
 def check_missing_policy_ids(exposure):
     missing_policy_ids = exposure[
@@ -701,6 +704,7 @@ def check_missing_policy_ids(exposure):
 
     return missing_policy_ids
 
+# Checks for missing hazard zone IDs
 
 def check_missing_hazard_ids(exposure):
     missing_hazard_ids = exposure[
@@ -709,6 +713,7 @@ def check_missing_hazard_ids(exposure):
 
     return missing_hazard_ids
 
+# Checks for negative TIV values
 
 def check_invalid_tiv(exposure):
     invalid_tiv = exposure[
@@ -717,6 +722,7 @@ def check_invalid_tiv(exposure):
 
     return invalid_tiv
 
+# Checks that each sub-section of TIV adds up to the correct total TIV
 
 def check_tiv_reconciliation(exposure):
     tiv_reconciliation_errors = exposure[
@@ -730,6 +736,7 @@ def check_tiv_reconciliation(exposure):
 
     return tiv_reconciliation_errors
 
+# Checks coordinates are plausible.
 
 def check_invalid_coordinates(exposure):
     invalid_coordinates = exposure[
@@ -743,6 +750,7 @@ def check_invalid_coordinates(exposure):
 
     return invalid_coordinates
 
+# Checks for missing construction codes
 
 def check_missing_construction(exposure):
     missing_construction = exposure[
@@ -751,6 +759,7 @@ def check_missing_construction(exposure):
 
     return missing_construction
 
+# Checks for missing occupancy data
 
 def check_missing_occupancy(exposure):
     missing_occupancy = exposure[
@@ -759,6 +768,7 @@ def check_missing_occupancy(exposure):
 
     return missing_occupancy
 
+# Checks for missing year of construction data
 
 def check_missing_year_built(exposure):
     missing_year_built = exposure[
@@ -767,6 +777,7 @@ def check_missing_year_built(exposure):
 
     return missing_year_built
 
+# Checks that policy IDs appear in both the exposure dataset and in the policy dataset. Critical as this is the primary key.
 
 def check_unmatched_policy_ids(exposure, policy):
     unmatched_policy_ids = exposure[
@@ -776,6 +787,8 @@ def check_unmatched_policy_ids(exposure, policy):
 
     return unmatched_policy_ids
 
+
+# Checks that hazard zone IDs appear in both the exposure dataset and the hazard dataset. Critical as this is the primary key.
 
 def check_unmatched_hazard_ids(exposure, hazard):
     unmatched_hazard_ids = exposure[
@@ -787,6 +800,8 @@ def check_unmatched_hazard_ids(exposure, hazard):
 
 
 # 3. Run all data quality checks
+
+# Runs the above functions
 
 checks = {
     "Duplicate Location IDs": check_duplicate_locations(exposure),
@@ -806,18 +821,18 @@ checks = {
 # 4. Display data quality report
 
 print("\nEXPOSURE DATA QUALITY REPORT")
-print("=" * 45)
+print("=" * 35)
 
 print("Exposure records:", exposure.shape[0])
 print("Policy records:", policy.shape[0])
 print("Hazard records:", hazard.shape[0])
 
-print("-" * 45)
+print("-" * 35)
 
 for check_name, result in checks.items():
     print(check_name + ":", len(result))
 
-print("=" * 45)
+print("=" * 35)
 
 
 
@@ -825,7 +840,8 @@ print("=" * 45)
 
 total_flags = 0
 
-for result in checks.values():
+
+for result in checks.values(): # Reverts back to the checks created earlier. 
     total_flags = total_flags + len(result)
 
 print("Total QA flags:", total_flags)
