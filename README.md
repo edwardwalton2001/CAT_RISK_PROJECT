@@ -551,8 +551,7 @@ Note: The Power BI .pbix file is not included in this repository due to its file
 
 
 ## Key Findings
-- **Regional Exposure:** The **East** region has the largest overall exposure **($804.3 million)**, whilst the **North** has the         least **($477.2 million)**.
-- **Policy Exposure:** **POL00097** had the largest total insured value at approximately **$30.6 million** distributed across 7 insured locations.      Its total TIV represented 3 times the policy limit.
+* **Regional Exposure:** The **East** region has the largest overall exposure **($804.3 million)**, whilst the **North** has the least **($477.2 million)**.
 * **Severe Hazard Exposure by Region:**
 
   * **Highest Severe Exposure Concentration:** **East** had the highest relative concentration of severe hazard exposure, with approximately **40% of its total TIV** located within severe hazard zones. This represented approximately **$327 million in severe TIV** across **108 insured locations**.
