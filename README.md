@@ -22,6 +22,7 @@ The project focuses on questions such as:
 - VS Code
 - Excel
 - Power BI
+- Python
 
 ## Dataset
 
