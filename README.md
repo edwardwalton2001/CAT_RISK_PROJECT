@@ -675,7 +675,7 @@ Two outputs are generated. **qa_summary.csv** provides a summary of the number o
 import pandas as pd
 import os
 
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text # Converts SQL string into a statement for execution in python.
 from sqlalchemy.engine import URL
 
 # 1. Load datasets
@@ -692,7 +692,7 @@ hazard = pd.read_csv("CSV_Files/Hazard.csv")
 
 def check_duplicate_locations(exposure):
     duplicate_locations = exposure[
-        exposure.duplicated(subset=["LocationID"], keep=False)
+        exposure.duplicated(subset=["LocationID"], keep=False) # Keep false flags every duplicate, allowing all duplicates to be seen.
     ]
 
     return duplicate_locations
@@ -701,7 +701,7 @@ def check_duplicate_locations(exposure):
 
 def check_missing_policy_ids(exposure):
     missing_policy_ids = exposure[
-        exposure["PolicyID"].isna()
+        exposure["PolicyID"].isna() # Checks whether values are missing
     ]
 
     return missing_policy_ids
@@ -724,7 +724,8 @@ def check_invalid_tiv(exposure):
 
     return invalid_tiv
 
-# Checks that each sub-section of TIV adds up to the correct total TIV
+# Checks for errors between reported total TIV against the sum of building, contents and businesss interuption TIV
+# Flags records where each sub-section of TIV does not equal the reported total
 
 def check_tiv_reconciliation(exposure):
     tiv_reconciliation_errors = exposure[
@@ -738,7 +739,8 @@ def check_tiv_reconciliation(exposure):
 
     return tiv_reconciliation_errors
 
-# Checks coordinates are plausible.
+# Checks coordinates are plausible and for any missing values.
+# '|' acts like 'OR' does in SQL as any one condition failed must result in a failed outcome.
 
 def check_invalid_coordinates(exposure):
     invalid_coordinates = exposure[
@@ -780,6 +782,9 @@ def check_missing_year_built(exposure):
     return missing_year_built
 
 # Checks that policy IDs appear in both the exposure dataset and in the policy dataset. Critical as this is the primary key in the policy dataset and the foreign key in the exposure dataset.
+# '.notna' returns 'True' when policy IDs are not missing in the policy dataset
+# '~' Checks whether each policy ID in the exposure dataset does NOT appear in the policy dataset
+
 def check_unmatched_policy_ids(exposure, policy):
     unmatched_policy_ids = exposure[
         exposure["PolicyID"].notna()
@@ -790,6 +795,9 @@ def check_unmatched_policy_ids(exposure, policy):
 
 
 # Checks that hazard zone IDs appear in both the exposure dataset and the hazard dataset. Critical as this is the primary key in the hazard dataset and the foreign key in the exposure dataset.
+# '.notna' returns 'True' when hazard zone IDs are not missing in the hazard dataset
+# '~' Checks whether each hazard zone ID in the exposure dataset does NOT appear in the hazard dataset.
+
 
 def check_unmatched_hazard_ids(exposure, hazard):
     unmatched_hazard_ids = exposure[
@@ -802,7 +810,8 @@ def check_unmatched_hazard_ids(exposure, hazard):
 
 # 3. Run all data quality checks
 
-# Runs the above functions
+# Runs the above functions and stores the DataFrames within the same dictionary: 'Checks'
+# Each key represents a validation test, whilst its value contains the results from the analysis.
 
 checks = {
     "Duplicate Location IDs": check_duplicate_locations(exposure),
@@ -820,6 +829,10 @@ checks = {
 
 
 # 4. Display data quality report
+# 'Check_name' recieves the name of each rule created in the checks and
+# 'result' receives each DataFrame
+# 'items' gives the key & and value pairs from the checks
+# len() counts the the returned rows
 
 print("\nEXPOSURE DATA QUALITY REPORT")
 print("=" * 35)
@@ -830,20 +843,20 @@ print("Hazard records:", hazard.shape[0])
 
 print("-" * 35)
 
-for check_name, result in checks.items():
+for check_name, result in checks.items(): 
     print(check_name + ":", len(result))
 
 print("=" * 35)
 
 
 
-# 5. Calculate total number of QA flags
+# 5. Calculate total number of QA flags across all QA checks
 
 total_flags = 0
 
 
 for result in checks.values(): # Reverts back to the checks created earlier. 
-    total_flags = total_flags + len(result)
+    total_flags = total_flags + len(result) # Adds each flag to a running total
 
 print("Total QA flags:", total_flags)
 
@@ -867,6 +880,10 @@ qa_summary = pd.DataFrame({
 
 
 # 7. Combine flagged records
+# '.copy' creates a copy of the DataFrame to avoid changing the original result
+# 'pd.concat' combines each DataFrame check into one table
+# ignore_index=True creates a new continuous row index. Helps to avoid duplicate row lookups.
+
 
 flagged_records = []
 
@@ -889,6 +906,8 @@ else:
 
 
 # 8. Creates Outputs folder
+# 'exist_ok=True' allows the pipeline to be rerun with new data without a 'folder already exists' error
+
 
 from pathlib import Path
 
@@ -896,6 +915,7 @@ Path("Outputs").mkdir(exist_ok=True)
 
 
 # 9. Export QA results
+
 
 qa_summary.to_csv(
     "Outputs/qa_summary.csv",
@@ -914,7 +934,7 @@ print("\nQA results exported successfully.")
 
 if total_flags == 0:
 
-    # Create PostgreSQL connection details
+    # Create PostgreSQL connection
     database_url = URL.create(
         drivername="postgresql+psycopg2",
         username=os.environ["PGUSER"],
@@ -926,24 +946,50 @@ if total_flags == 0:
 
     engine = create_engine(database_url)
 
-    # Refresh the validated exposure table
+    # Refresh all three validated datasets
     with engine.begin() as connection:
 
-        # Remove previous exposure records
-        connection.execute( 
-            text("DELETE FROM public.validated_exposure") # Deletes previous data from the table to make space for the new input data
+        # Remove existing records from validated_exposure, validated_hazard and validated_policy
+        connection.execute(
+            text("DELETE FROM public.validated_exposure")
         )
 
-        # Insert the new QA-approved records
+        connection.execute(
+                    text("DELETE FROM public.validated_hazard")
+        )
+
+        connection.execute(
+                    text("DELETE FROM public.validated_policy")
+        )
+
+        # Load QA-approved exposure records
         exposure.to_sql(
             name="validated_exposure",
             con=connection,
             schema="public",
-            if_exists="append", # Inserts the validated exposure records into the existing table
+            if_exists="append",
             index=False
         )
 
-    print("QA passed. PostgreSQL exposure data refreshed successfully.")
+        # Load the policy dataset
+        policy.to_sql(
+            name="validated_policy",
+            con=connection,
+            schema="public",
+            if_exists="append",
+            index=False
+        )
+
+        # Load the hazard dataset
+        hazard.to_sql(
+            name="validated_hazard",
+            con=connection,
+            schema="public",
+            if_exists="append",
+            index=False
+        )
+
+    print("QA passed. Exposure, Policy and Hazard data loaded successfully.")
 
 else:
     print("QA failed. PostgreSQL load cancelled.")
