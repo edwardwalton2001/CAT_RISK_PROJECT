@@ -887,7 +887,14 @@ else:
 
 
 
-# 8. Export QA results
+# 8. Creates Outputs folder
+
+from pathlib import Path
+
+Path("Outputs").mkdir(exist_ok=True)
+
+
+# 9. Export QA results
 
 qa_summary.to_csv(
     "Outputs/qa_summary.csv",
@@ -900,7 +907,47 @@ flagged_records.to_csv(
 )
 
 print("\nQA results exported successfully.")
+
+
+# 10. Load exposure data into PostgreSQL if QA passes
+
+if total_flags == 0:
+
+    # Create PostgreSQL connection details
+    database_url = URL.create(
+        drivername="postgresql+psycopg2",
+        username=os.environ["PGUSER"],
+        password=os.environ["PGPASSWORD"],
+        host=os.environ["PGHOST"],
+        port=int(os.environ["PGPORT"]),
+        database=os.environ["PGDATABASE"]
+    )
+
+    engine = create_engine(database_url)
+
+    # Refresh the validated exposure table
+    with engine.begin() as connection:
+
+        # Remove previous exposure records
+        connection.execute( 
+            text("DELETE FROM public.validated_exposure")
+        )
+
+        # Insert the new QA-approved records
+        exposure.to_sql(
+            name="validated_exposure",
+            con=connection,
+            schema="public",
+            if_exists="append",
+            index=False
+        )
+
+    print("QA passed. PostgreSQL exposure data refreshed successfully.")
 ```
+
+else:
+    print("QA failed. PostgreSQL load cancelled.")
+    print("Review the QA reports in the Outputs folder.")
 
 **Results:** There were no errors found within the dataset. To check the pipeline was functioning, the data was edited to be obviously erroneous. Running the pipeline on the erroneous data returned issues, indicating that the pipeline was working well. 
 
