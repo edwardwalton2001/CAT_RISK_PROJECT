@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project analyses a simulated insurance exposure portfolio to identify concentrations of insured value across policies, geographic regions and hazard zones. The analysis uses location-level exposure data containing Total Insured Value (TIV), policy information and hazard characteristics. PostgreSQL is used to join, aggregate and analyse the datasets to identify significant exposure concentrations and areas with elevated hazard exposure.
+This project analyses a simulated insurance exposure portfolio to identify concentrations of insured value across policies, geographic regions and hazard zones. The analysis uses location-level exposure data containing Total Insured Value (TIV), policy information and hazard characteristics. PostgreSQL is used to join, aggregate and analyse the datasets to identify significant exposure concentrations and areas with elevated hazard exposure. Python was used to create an automated data quality assurance pipeline that could be used for future datasets with the same structure.
 
 
 The project focuses on questions such as:
