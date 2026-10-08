@@ -942,12 +942,11 @@ if total_flags == 0:
         )
 
     print("QA passed. PostgreSQL exposure data refreshed successfully.")
-```
 
 else:
     print("QA failed. PostgreSQL load cancelled.")
     print("Review the QA reports in the Outputs folder.")
-
+```
 **Results:** There were no errors found within the dataset. To check the pipeline was functioning, the data was edited to be obviously erroneous. Running the pipeline on the erroneous data returned issues, indicating that the pipeline was working well. 
 
 ## Skills Demonstrated
