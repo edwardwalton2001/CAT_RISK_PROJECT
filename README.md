@@ -554,7 +554,7 @@ Note: The Power BI .pbix file is not included in this repository due to its file
 * **Regional Exposure:** The **East** region has the largest overall exposure **($804.3 million)**, whilst the **North** has the least **($477.2 million)**.
 
   * **Highest Severe Exposure Concentration:** **East** had the highest relative concentration of severe hazard exposure, with approximately **40% of its total TIV** located within severe hazard zones. This represented approximately **$327 million in severe TIV** across **108 insured locations**.
-  * **Largest Absolute Severe Exposure:** The East also had the largest absolute amount of TIV located within severe hazard zones, demonstrating that it had both the highest absolute severe exposure and the highest relative Severe exposure concentration among the regions analysed.
+  * **Largest Absolute Severe Exposure:** The East also had the largest absolute amount of TIV located within severe hazard zones, demonstrating that it had both the highest absolute severe exposure and the highest relative severe exposure concentration among the regions analysed.
 
 * **Policy Hazard-Zone Concentration:**
 
@@ -577,7 +577,7 @@ Note: The Power BI .pbix file is not included in this repository due to its file
 
 * **Property Characteristics concentration**
 
-   * **Synopsis:** Severe hazard exposure varies quite considerably across property characteristics. Hospitality properties with concrete construction built between 1960–1979 recorded the largest severe-zone exposure at approximately **$36.2m**, representing **47.6%** of the group's total TIV. However, this is spread over 11 severe locations and shared among 23 individual policies. 
+   * **Synopsis:** Severe hazard exposure varies quite considerably across property characteristics. One particular hospitality property with concrete construction built between 1960–1979 recorded the largest severe-zone exposure at approximately **$36.2m**, representing **47.6%** of the group's total TIV. However, this is spread over 11 severe locations and shared among 23 individual policies. 
    *  **Exposure by Building Age:** Properties constructed between 1960 and 1979 had the highest severe TIV at approximately **$29.1m** which represented **35%** of the **$82m** total TIV.
    *  **Exposure by Occupancy:** Hospitality recorded both the highest absolute TIV and severe TIV at **$81.7m** and **$26.3m** respectively. Severe TIV contributed 32% towards the total TIV for hospitality. Conversely, industrial properties recorded both the lowest absolute TIV **($68.6m)** and severe TIV **($20.6m)**. Overall, severe TIV concentration was relatively consistent across occupancy types, ranging from approximately **30%** to **32%**.
    *  **Exposure by Construction Type:** Concrete recorded the greatest concentration of severe TIV at around **35%** with a severe TIV of **$80.6m**. However, masonry recorded a greater absolute TIV of **$81.2m** compared with **$80.6m** for concrete. On the other hand, masonry has a significantly lower exposure in severe hazard zones, with **29%** of it's total TIV located within severe hazard zones.
@@ -697,11 +697,27 @@ def check_duplicate_locations(exposure):
 
     return duplicate_locations
 
+# Identify PolicyIDs that appear more than once in the Policy dataset.
+
+def check_duplicate_policy_ids(policy):
+    return policy[
+        policy.duplicated(subset=["PolicyID"], keep=False)
+    ]
+
+
+# Identify HazardZoneIDs that appear more than once in the Hazard dataset.
+
+def check_duplicate_hazard_ids(hazard):
+    return hazard[
+        hazard.duplicated(subset=["HazardZoneID"], keep=False)
+    ]
+
 # Checks for missing policy IDs
 
 def check_missing_policy_ids(exposure):
     missing_policy_ids = exposure[
         exposure["PolicyID"].isna() # Checks whether values are missing
+        | exposure["PolicyID"].astype("string").str.strip().eq("")
     ]
 
     return missing_policy_ids
@@ -711,6 +727,7 @@ def check_missing_policy_ids(exposure):
 def check_missing_hazard_ids(exposure):
     missing_hazard_ids = exposure[
         exposure["HazardZoneID"].isna()
+        | exposure["HazardZoneID"].astype("string").str.strip().eq("")
     ]
 
     return missing_hazard_ids
@@ -759,6 +776,7 @@ def check_invalid_coordinates(exposure):
 def check_missing_construction(exposure):
     missing_construction = exposure[
         exposure["ConstructionCode"].isna()
+        | exposure["ConstructionCode"].astype("string").str.strip().eq("")
     ]
 
     return missing_construction
@@ -768,6 +786,7 @@ def check_missing_construction(exposure):
 def check_missing_occupancy(exposure):
     missing_occupancy = exposure[
         exposure["Occupancy"].isna()
+        | exposure["Occupancy"].astype("string").str.strip().eq("")
     ]
 
     return missing_occupancy
@@ -777,6 +796,7 @@ def check_missing_occupancy(exposure):
 def check_missing_year_built(exposure):
     missing_year_built = exposure[
         exposure["YearBuilt"].isna()
+        | exposure["YearBuilt"].astype("string").str.strip().eq("")
     ]
 
     return missing_year_built
