@@ -779,8 +779,7 @@ def check_missing_year_built(exposure):
 
     return missing_year_built
 
-# Checks that policy IDs appear in both the exposure dataset and in the policy dataset. Critical as this is the primary key.
-
+# Checks that policy IDs appear in both the exposure dataset and in the policy dataset. Critical as this is the primary key in the policy dataset and the foreign key in the exposure dataset.
 def check_unmatched_policy_ids(exposure, policy):
     unmatched_policy_ids = exposure[
         exposure["PolicyID"].notna()
@@ -790,7 +789,7 @@ def check_unmatched_policy_ids(exposure, policy):
     return unmatched_policy_ids
 
 
-# Checks that hazard zone IDs appear in both the exposure dataset and the hazard dataset. Critical as this is the primary key.
+# Checks that hazard zone IDs appear in both the exposure dataset and the hazard dataset. Critical as this is the primary key in the hazard dataset and the foreign key in the exposure dataset.
 
 def check_unmatched_hazard_ids(exposure, hazard):
     unmatched_hazard_ids = exposure[
