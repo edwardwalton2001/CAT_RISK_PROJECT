@@ -673,7 +673,10 @@ Two outputs are generated. **qa_summary.csv** provides a summary of the number o
 
 ```python
 import pandas as pd
+import os
 
+from sqlalchemy import create_engine, text
+from sqlalchemy.engine import URL
 
 # 1. Load datasets
 
