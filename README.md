@@ -932,7 +932,7 @@ if total_flags == 0:
 
         # Remove previous exposure records
         connection.execute( 
-            text("DELETE FROM public.validated_exposure")
+            text("DELETE FROM public.validated_exposure") # Deletes previous data from the table to make space for the new input data
         )
 
         # Insert the new QA-approved records
@@ -940,7 +940,7 @@ if total_flags == 0:
             name="validated_exposure",
             con=connection,
             schema="public",
-            if_exists="append", #Enables the QA summary to be updated with the new exposure data when needed
+            if_exists="append", # Inserts the validated exposure records into the existing table
             index=False
         )
 
