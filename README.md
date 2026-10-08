@@ -575,7 +575,7 @@ Note: The Power BI .pbix file is not included in this repository due to its file
   * **Other Notable Concentrations:** Pennsylvania and Massachusetts had the next-highest single-zone concentrations, with their largest hazard zones accounting for approximately **13.7%** and **13.2%** of total state TIV, respectively.
   * **Lowest Hazard-Zone Concentration:** Louisiana had the lowest concentration within its largest hazard zone at approximately **9.6%**, indicating that its exposure was more dispersed across hazard zones than the other states analysed.
 
-* **Property Characteristics concentration**
+* **Property Characteristics Concentration**
 
    * **Synopsis:** Severe hazard exposure varies quite considerably across property characteristics. One particular hospitality property with concrete construction built between 1960–1979 recorded the largest severe-zone exposure at approximately **$36.2m**, representing **47.6%** of the group's total TIV. However, this is spread over 11 severe locations and shared among 23 individual policies. 
    *  **Exposure by Building Age:** Properties constructed between 1960 and 1979 had the highest severe TIV at approximately **$29.1m** which represented **35%** of the **$82m** total TIV.
