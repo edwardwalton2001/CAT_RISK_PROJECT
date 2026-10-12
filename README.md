@@ -583,7 +583,7 @@ Note: The Power BI .pbix file is not included in this repository due to its file
    *  **Exposure by Construction Type:** Concrete recorded the greatest concentration of severe TIV at around **35%** with a severe TIV of **$80.6m**. However, masonry recorded a greater absolute TIV of **$81.2m** compared with **$80.6m** for concrete. On the other hand, masonry has a significantly lower exposure in severe hazard zones, with **29%** of it's total TIV located within severe hazard zones.
  
  
- **Exposure Distribution:** The analysis identified differences in both the absolute amount and relative concentration of severe hazard exposure          across regions, demonstrating why total TIV and hazard concentration should be considered separately.
+* **Exposure Distribution:** The analysis identified differences in both the absolute amount and relative concentration of severe hazard exposure          across regions, demonstrating why total TIV and hazard concentration should be considered separately.
 
 
 ## Data Quality 
