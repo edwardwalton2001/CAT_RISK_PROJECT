@@ -687,17 +687,18 @@ hazard = pd.read_csv("CSV_Files/Hazard.csv")
 
 # 2. Define data quality checks
 # Creates function for each variable.
+# 'Keep false' flags every duplicate, allowing all duplicates to be seen.
 
 # Identifies duplicate location IDs
 
 def check_duplicate_locations(exposure):
     duplicate_locations = exposure[
-        exposure.duplicated(subset=["LocationID"], keep=False) # Keep false flags every duplicate, allowing all duplicates to be seen.
+        exposure.duplicated(subset=["LocationID"], keep=False) 
     ]
 
     return duplicate_locations
 
-# Identify PolicyIDs that appear more than once in the Policy dataset.
+# Identify policy IDs that appear more than once in the Policy dataset.
 
 def check_duplicate_policy_ids(policy):
     return policy[
@@ -705,7 +706,7 @@ def check_duplicate_policy_ids(policy):
     ]
 
 
-# Identify HazardZoneIDs that appear more than once in the Hazard dataset.
+# Identify hazard zone IDs that appear more than once in the Hazard dataset.
 
 def check_duplicate_hazard_ids(hazard):
     return hazard[
@@ -713,6 +714,8 @@ def check_duplicate_hazard_ids(hazard):
     ]
 
 # Checks for missing policy IDs
+# '.str.strip()' removes spaces from the start and end of each value. '.eq()' then checks whether the value is empty.
+
 
 def check_missing_policy_ids(exposure):
     missing_policy_ids = exposure[
@@ -772,11 +775,12 @@ def check_invalid_coordinates(exposure):
     return invalid_coordinates
 
 # Checks for missing construction codes
+# Removes spaces from the start and end of each value. Then checks whether the value is empty.
 
 def check_missing_construction(exposure):
     missing_construction = exposure[
-        exposure["ConstructionCode"].isna()
-        | exposure["ConstructionCode"].astype("string").str.strip().eq("")
+        exposure["ConstructionCode"].isna() # Checks for missing values
+        | exposure["ConstructionCode"].astype("string").str.strip().eq("") 
     ]
 
     return missing_construction
