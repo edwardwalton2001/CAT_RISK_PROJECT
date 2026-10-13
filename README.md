@@ -839,6 +839,8 @@ def check_unmatched_hazard_ids(exposure, hazard):
 
 checks = {
     "Duplicate Location IDs": check_duplicate_locations(exposure),
+    "Duplicate Policy IDs": check_duplicate_policy_ids(exposure),
+    "Duplicate Hazard Zone IDs": check_duplicate_hazard_zone_ids(exposure),
     "Missing Policy IDs": check_missing_policy_ids(exposure),
     "Missing Hazard Zone IDs": check_missing_hazard_ids(exposure),
     "Zero or Negative TIV": check_invalid_tiv(exposure),
